@@ -1,0 +1,2461 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AGRO</title>
+  <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./static/style.css">
+  <script>
+    if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+      const manifestLink = document.createElement("link");
+      manifestLink.rel = "manifest";
+      manifestLink.href = "./static/manifest.webmanifest";
+      document.head.appendChild(manifestLink);
+    }
+  </script>
+  <meta name="theme-color" content="#111111">
+</head>
+<body class="settings-collapsed">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom" aria-label="Main navbar">
+    <div class="container-xl">
+      <a class="navbar-brand" href="#"><img src="images/logo.png" height="50" alt=""></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsMain" aria-controls="navbarsMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarsMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="calibrate_button">
+              &#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1080;
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+              </svg>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdownCalibrate" data-bs-toggle="dropdown" aria-expanded="false">
+              &#1050;&#1072;&#1083;&#1080;&#1073;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100;
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownCalibrate">
+              <li><a class="dropdown-item calibrate-action" href="#" data-calibrate-slave="1">&#1044;&#1077;&#1083;&#1100;&#1090;&#1072;-&#1088;&#1086;&#1073;&#1086;&#1090; (slave 1)</a></li>
+              <li><a class="dropdown-item go-work-action" href="#" data-go-work-slave="1">&#1044;&#1077;&#1083;&#1100;&#1090;&#1072; &#1088;&#1086;&#1073;&#1086;&#1090; (go work)</a></li>
+              <li><a class="dropdown-item calibrate-action" href="#" data-calibrate-slave="2">&#1055;&#1086;&#1074;&#1086;&#1088;&#1086;&#1090;&#1085;&#1099;&#1081; &#1084;&#1077;&#1093;&#1072;&#1085;&#1080;&#1079;&#1084; (slave 2)</a></li>
+              <li><a class="dropdown-item calibrate-action" href="#" data-calibrate-slave="3">&#1064;&#1080;&#1088;&#1080;&#1085;&#1072; &#1096;&#1072;&#1089;&#1089;&#1080; (slave 3)</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdownConnection" data-bs-toggle="dropdown" aria-expanded="false">
+              &#1055;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1077;
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownConnection" id="connectionPortsMenu">
+              <li><span class="dropdown-item-text">&#1047;&#1072;&#1075;&#1088;&#1091;&#1079;&#1082;&#1072; &#1087;&#1086;&#1088;&#1090;&#1086;&#1074;...</span></li>
+            </ul>
+          </li>
+        </ul>
+        <form>
+          Port:
+          <span id="selectedPortLabel">COM19</span>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="layout-shell">
+    <div id="leftBlock" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark-custom left-block">
+      <button
+        id="logsToggleBtn"
+        class="logs-toggle-btn"
+        type="button"
+        aria-controls="leftBlock"
+        aria-expanded="true"
+        aria-label="Скрыть логи"
+        title="Скрыть логи"
+      >
+        <span id="logsToggleIcon" class="logs-toggle-icon" aria-hidden="true">‹</span>
+      </button>
+      <code id="logsBlock" class="logs-block">
+Waiting for robot events...
+Controller online
+Telemetry stream idle
+      </code>
+    </div>
+
+    <main class="right-content">
+      <section class="content-card">
+        <div class="card-options mb-2">
+          <div class="btn-group">
+            <button id="startBtn" type="button" class="btn btn-sm btn-success">&#1053;&#1072;&#1095;&#1072;&#1090;&#1100;</button>
+            <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a id="visualizationBtn" class="dropdown-item" href="#">&#1042;&#1080;&#1079;&#1091;&#1072;&#1083;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103;</a></li>
+              <li><a id="startProcessingBtn" class="dropdown-item" href="#">&#1053;&#1072;&#1095;&#1072;&#1090;&#1100; &#1086;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1091;</a></li>
+              <li><a id="processNoCommandBtn" class="dropdown-item" href="#">&#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1073;&#1077;&#1079; &#1086;&#1090;&#1087;&#1088;&#1072;&#1074;&#1082;&#1080; &#1082;&#1086;&#1084;&#1072;&#1085;&#1076;&#1099;</a></li>
+              <li><a id="openRawVideoBtn" class="dropdown-item" href="#">&#1054;&#1090;&#1082;&#1088;&#1099;&#1090;&#1100; &#1074;&#1080;&#1076;&#1077;&#1086; &#1087;&#1086;&#1090;&#1086;&#1082;</a></li>
+            </ul>
+
+          </div>
+          <button id="stopBtn" class="btn btn-warning btn-sm">&#1054;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1080;&#1090;&#1100;</button>
+          <button id="coordinateBtn" type="button" class="btn btn-sm btn-secondary">Координация</button>
+          <button id="limitModeBtn" type="button" class="btn btn-sm btn-secondary">Лимит</button>
+          <button id="turnModeBtn" type="button" class="btn btn-sm btn-secondary">Поворот</button>
+          <button id="videoConfigBtn" class="btn btn-secondary btn-sm" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+              <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="card-body video-container">
+          <div id="coordinatePanel" class="coordinate-panel mode-panel d-none">
+            <div class="coordinate-stage">
+              <div id="coordinateMap" class="coordinate-map" role="button" tabindex="0" aria-label="XY coordinate map">
+                <div class="coordinate-axis coordinate-axis-x"></div>
+                <div class="coordinate-axis coordinate-axis-y"></div>
+                <div class="coordinate-axis-label coordinate-axis-label-x">X</div>
+                <div class="coordinate-axis-label coordinate-axis-label-y">Y</div>
+                <div id="coordinateMarker" class="coordinate-marker"></div>
+              </div>
+              <div class="coordinate-z-column">
+                <input id="coordinateZSlider" class="coordinate-z-slider" type="range" min="-520" max="-180" step="1" value="-180" />
+                <div id="coordinateZLabel" class="coordinate-z-label">Z: -180 mm</div>
+              </div>
+            </div>
+            <div class="coordinate-meta">
+              <div id="coordinateRangeLabel" class="coordinate-line">Range X/Y: ±69 mm</div>
+              <div class="coordinate-line coordinate-target-row">
+                <span>Target:</span>
+                <label>X=<input id="coordinateInputX" class="coordinate-target-input" type="number" step="1" value="0"></label>
+                <label>Y=<input id="coordinateInputY" class="coordinate-target-input" type="number" step="1" value="0"></label>
+                <label>Z=<input id="coordinateInputZ" class="coordinate-target-input" type="number" step="1" value="-180"></label>
+              </div>
+              <div class="coordinate-line coordinate-duration-row">
+                <label id="coordinateDurationLabel" class="coordinate-duration-label" for="coordinateInputDuration">Время перемещение</label>
+                <input id="coordinateInputDuration" class="coordinate-target-input coordinate-duration-input" type="number" min="500" max="60000" step="100" value="12000">
+                <span class="coordinate-duration-unit">мс</span>
+              </div>
+              <div id="coordinateLastLabel" class="coordinate-line">Last: calibration required</div>
+              <button id="coordinateSendBtn" class="btn btn-sm btn-primary" type="button">Отправить координаты</button>
+            </div>
+          </div>
+          <div id="limitPanel" class="limit-panel mode-panel d-none">
+            <div class="limit-layout">
+              <section class="limit-visual-card">
+                <div class="limit-card-head">
+                  <div>
+                    <div class="limit-card-title">Лимитный механизм</div>
+                    <div class="limit-card-subtitle">Порт: <span id="limitPortLabel">COM19</span></div>
+                  </div>
+                  <div id="limitPreviewValue" class="limit-preview-value">0.0 см</div>
+                </div>
+                <svg id="limitMechanismSvg" class="limit-mechanism-svg" viewBox="0 0 400 240" aria-label="Визуализация ширины механизма">
+                  <polygon id="limitChassisPolygon" class="limit-mechanism-body" points="100,40 300,40 300,200 100,200"></polygon>
+                  <rect id="limitWheel1" class="limit-mechanism-wheel" x="85" y="60" width="30" height="44" rx="10" ry="10"></rect>
+                  <rect id="limitWheel2" class="limit-mechanism-wheel" x="285" y="60" width="30" height="44" rx="10" ry="10"></rect>
+                  <rect id="limitWheel3" class="limit-mechanism-wheel" x="285" y="136" width="30" height="44" rx="10" ry="10"></rect>
+                  <rect id="limitWheel4" class="limit-mechanism-wheel" x="85" y="136" width="30" height="44" rx="10" ry="10"></rect>
+                </svg>
+                <div class="limit-scale-row">
+                  <span>0 см</span>
+                  <span>Предпросмотр позиции</span>
+                  <span>20 см</span>
+                </div>
+              </section>
+
+              <section class="limit-control-card">
+                <div class="limit-card-title">Абсолютная позиция</div>
+                <div class="limit-status-grid">
+                  <label class="limit-status-field">
+                    <span>Текущая</span>
+                    <input id="limitCurrentPositionLabel" class="form-control form-control-sm" type="text" value="0.0 см" readonly>
+                  </label>
+                  <label class="limit-status-field">
+                    <span>Цель</span>
+                    <input id="limitTargetPositionInput" class="form-control form-control-sm" type="number" min="0" max="20" step="0.1" value="0">
+                  </label>
+                  <label class="limit-status-field">
+                    <span>RPM</span>
+                    <select id="limitRpmSelect" class="form-select form-select-sm">
+                      <option value="60">60</option>
+                      <option value="120">120</option>
+                      <option value="180">180</option>
+                      <option value="240">240</option>
+                      <option value="300">300</option>
+                    </select>
+                  </label>
+                </div>
+                <input id="limitPositionSlider" class="limit-position-slider" type="range" min="0" max="20" step="0.1" value="0">
+                <div class="limit-actions-row">
+                  <button id="limitSendBtn" class="btn btn-sm btn-primary" type="button">Переместить</button>
+                  <button id="limitRefreshBtn" class="btn btn-sm btn-outline-light" type="button">Считать позицию</button>
+                </div>
+                <div class="limit-divider"></div>
+                <div class="limit-card-title">Ручной режим</div>
+                <div class="btn-group btn-group-sm w-100 mb-2" role="group" aria-label="Limit switch motor selection">
+                  <input class="btn-check" type="checkbox" id="limitMotor1Input" checked>
+                  <label class="btn btn-outline-light" for="limitMotor1Input">M1</label>
+                  <input class="btn-check" type="checkbox" id="limitMotor2Input" checked>
+                  <label class="btn btn-outline-light" for="limitMotor2Input">M2</label>
+                  <input class="btn-check" type="checkbox" id="limitMotor3Input" checked>
+                  <label class="btn btn-outline-light" for="limitMotor3Input">M3</label>
+                  <input class="btn-check" type="checkbox" id="limitMotor4Input" checked>
+                  <label class="btn btn-outline-light" for="limitMotor4Input">M4</label>
+                </div>
+                <div class="btn-group btn-group-sm w-100" role="group" aria-label="Limit switch actions">
+                  <button id="limitJogInBtn" class="btn btn-outline-success" type="button">Сузить</button>
+                  <button id="limitJogOutBtn" class="btn btn-outline-primary" type="button">Расширить</button>
+                  <button id="limitJogStopBtn" class="btn btn-outline-danger" type="button">Стоп</button>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div id="turnPanel" class="turn-panel mode-panel d-none">
+            <div class="turn-layout">
+              <section class="turn-visual-card">
+                <div class="turn-card-head">
+                  <div>
+                    <div class="turn-card-title">Поворотный механизм</div>
+                    <div class="turn-card-subtitle">Порт: <span id="turnPortLabel">COM19</span></div>
+                  </div>
+                  <div id="turnCurrentAngleBadge" class="turn-current-badge">0°</div>
+                </div>
+                <div class="turn-dial" id="turnDial" aria-label="Абсолютный угол поворотного механизма">
+                  <div class="turn-dial-ring"></div>
+                  <div id="turnTargetNeedle" class="turn-needle turn-needle-target"></div>
+                  <div id="turnCurrentNeedle" class="turn-needle turn-needle-current"></div>
+                  <div class="turn-dial-center"></div>
+                  <div class="turn-dial-label turn-dial-label-top">0°</div>
+                  <div class="turn-dial-label turn-dial-label-right">+90°</div>
+                  <div class="turn-dial-label turn-dial-label-left">-90°</div>
+                </div>
+                <div class="turn-legend">
+                  <span class="turn-legend-item"><span class="turn-legend-dot turn-legend-dot-current"></span> Текущий</span>
+                  <span class="turn-legend-item"><span class="turn-legend-dot turn-legend-dot-target"></span> Целевой</span>
+                </div>
+              </section>
+
+              <section class="turn-control-card">
+                <div class="turn-card-title">Абсолютный угол</div>
+                <div class="turn-status-grid">
+                  <label class="turn-status-field">
+                    <span>Текущий</span>
+                    <input id="turnCurrentAngleLabel" class="form-control form-control-sm" type="text" value="0°" readonly>
+                  </label>
+                  <label class="turn-status-field">
+                    <span>Цель</span>
+                    <input id="turnTargetAngleInput" class="form-control form-control-sm" type="number" min="-90" max="90" step="1" value="0">
+                  </label>
+                  <label class="turn-status-field">
+                    <span>Дельта</span>
+                    <input id="turnDeltaAngleLabel" class="form-control form-control-sm" type="text" value="0°" readonly>
+                  </label>
+                </div>
+                <input id="turnAngleSlider" class="turn-angle-slider" type="range" min="-90" max="90" step="1" value="0">
+                <div class="form-check form-switch mt-2 mb-2 text-light">
+                  <input class="form-check-input" type="checkbox" id="turnCrabModeInput">
+                  <label class="form-check-label" for="turnCrabModeInput">Крабовый поворот</label>
+                </div>
+                <div class="turn-actions-row">
+                  <button id="turnSendBtn" class="btn btn-sm btn-primary" type="button">Повернуть</button>
+                  <button id="turnRefreshBtn" class="btn btn-sm btn-outline-light" type="button">Обновить</button>
+                  <button id="turnCalibrateBtn" class="btn btn-sm btn-outline-warning" type="button">Калибровка</button>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div id="settingsPanel" class="settings-panel" aria-label="Панель настроек">
+            <button
+              id="settingsToggleBtn"
+              class="settings-toggle-btn"
+              type="button"
+              aria-controls="settingsPanel"
+              aria-expanded="false"
+              aria-label="Показать настройки"
+              title="Показать настройки"
+            >
+              <span id="settingsToggleIcon" class="settings-toggle-icon" aria-hidden="true">‹</span>
+            </button>
+            <aside id="zoneControlDrawer" class="settings-drawer">
+              <div class="zone-drawer-title">&#1057;&#1084;&#1077;&#1097;&#1077;&#1085;&#1080;&#1077; &#1079;&#1086;&#1085;&#1099; &#1086;&#1073;&#1085;&#1072;&#1088;&#1091;&#1078;&#1077;&#1085;&#1080;&#1103;</div>
+              <div id="zoneOffsetLabel" class="zone-offset-label">X: +0 px | Y: +0 px</div>
+              <div class="zone-size-line">
+                <div id="zoneSizeLabel" class="zone-size-label">Size: 420 px | 138.0 mm</div>
+                <div class="zone-size-actions">
+                  <button id="zoneSizeMinusBtn" class="btn btn-sm btn-outline-light zone-size-btn" type="button">-</button>
+                  <button id="zoneSizePlusBtn" class="btn btn-sm btn-outline-light zone-size-btn" type="button">+</button>
+                </div>
+              </div>
+              <div class="zone-dpad">
+                <div class="zone-pad-empty"></div>
+                <button id="zoneUpBtn" class="btn btn-sm btn-outline-light" type="button">&#8593;</button>
+                <div class="zone-pad-empty"></div>
+                <button id="zoneLeftBtn" class="btn btn-sm btn-outline-light" type="button">&#8592;</button>
+                <button id="zoneDownBtn" class="btn btn-sm btn-outline-light" type="button">&#8595;</button>
+                <button id="zoneRightBtn" class="btn btn-sm btn-outline-light" type="button">&#8594;</button>
+              </div>
+              <div class="zone-mm-row">
+                <input id="zoneMmInput" class="zone-mm-input" type="number" min="10" step="1" placeholder="mm">
+                <span class="zone-mm-hint">mm</span>
+              </div>
+              <button id="zoneResetBtn" class="btn btn-sm btn-outline-warning zone-reset-btn" type="button">
+                &#1057;&#1073;&#1088;&#1086;&#1089;
+              </button>
+              <div class="robot-settings-block">
+                <div class="zone-drawer-title">Настройки робота и детекции</div>
+                <div class="robot-settings-grid">
+                  <label class="robot-settings-field" for="detectionConfInput">
+                    <span>Conf</span>
+                    <input id="detectionConfInput" class="zone-mm-input" type="number" min="0.01" max="1" step="0.01" value="0.25">
+                  </label>
+                  <label class="robot-settings-field" for="robotRotationInput">
+                    <span>XY rotate (deg)</span>
+                    <input id="robotRotationInput" class="zone-mm-input" type="number" min="-360" max="360" step="0.1" value="95">
+                  </label>
+                </div>
+                <div class="rotation-visual-wrap">
+                  <div class="rotation-visual-header">Система координат XY</div>
+                  <div class="rotation-visual-stage">
+                    <div id="rotationViz" class="rotation-viz">
+                      <div id="rotationAxesOriginal" class="rotation-axes rotation-axes-original">
+                        <div class="rotation-axis-line rotation-axis-line-x"></div>
+                        <div class="rotation-axis-line rotation-axis-line-y"></div>
+                      </div>
+                      <div id="rotationAxesDraft" class="rotation-axes rotation-axes-draft">
+                        <div class="rotation-axis-line rotation-axis-line-x"></div>
+                        <div class="rotation-axis-line rotation-axis-line-y"></div>
+                      </div>
+                      <div class="rotation-viz-center"></div>
+                      <div class="rotation-viz-axis-label rotation-viz-axis-label-x">X</div>
+                      <div class="rotation-viz-axis-label rotation-viz-axis-label-y">Y</div>
+                    </div>
+                    <div class="rotation-knob-wrap">
+                      <div
+                        id="rotationKnob"
+                        class="rotation-knob"
+                        role="slider"
+                        tabindex="0"
+                        aria-label="XY rotation control"
+                        aria-valuemin="-360"
+                        aria-valuemax="360"
+                        aria-valuenow="95"
+                      ></div>
+                      <div id="rotationKnobValue" class="rotation-knob-value">95.0°</div>
+                    </div>
+                  </div>
+                  <div class="rotation-values">
+                    <div id="rotationBaseLabel" class="rotation-value-line">Исходный: 95.0°</div>
+                    <div id="rotationDraftLabel" class="rotation-value-line">Новый: 95.0°</div>
+                  </div>
+                </div>
+                <div class="robot-invert-row">
+                  <label><input id="robotInvertXInput" type="checkbox"> invert X</label>
+                  <label><input id="robotInvertYInput" type="checkbox"> invert Y</label>
+                  <label><input id="robotInvertZInput" type="checkbox"> invert Z</label>
+                </div>
+                <button id="robotSettingsSaveBtn" class="btn btn-sm btn-outline-info zone-reset-btn" type="button">Сохранить параметры</button>
+              </div>
+            </aside>
+          </div>
+          <img id="videoFrame" src="" alt="video stream">
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span class="site-footer__title">Разработан в НИЛ "Киберзащита и искусственный интеллект"</span>
+      <span class="site-footer__authors">© Все права защищены </span>
+    </div>
+  </footer>
+
+  <script src="./static/jquery-4.0.0.min.js"></script>
+  <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const IS_FILE_MODE = window.location.protocol === "file:";
+    const API_HOST = IS_FILE_MODE || !window.location.hostname ? "127.0.0.1" : window.location.hostname;
+    const API_PROTOCOL = IS_FILE_MODE ? "http" : (window.location.protocol === "https:" ? "https" : "http");
+    const API_BASE = `${API_PROTOCOL}://${API_HOST}:8000`;
+    const API_V1 = `${API_BASE}/api/v1`;
+    const videoFrame = document.getElementById("videoFrame");
+    const leftBlock = document.getElementById("leftBlock");
+    const logsToggleBtn = document.getElementById("logsToggleBtn");
+    const logsToggleIcon = document.getElementById("logsToggleIcon");
+    const calibrateButton = document.getElementById("calibrate_button");
+    const calibrateActions = document.querySelectorAll(".calibrate-action");
+    const goWorkActions = document.querySelectorAll(".go-work-action");
+    const dropdownConnection = document.getElementById("dropdownConnection");
+    const connectionPortsMenu = document.getElementById("connectionPortsMenu");
+    const selectedPortLabel = document.getElementById("selectedPortLabel");
+    const startBtn = document.getElementById("startBtn");
+    const startProcessingBtn = document.getElementById("startProcessingBtn");
+    const processNoCommandBtn = document.getElementById("processNoCommandBtn");
+    const openRawVideoBtn = document.getElementById("openRawVideoBtn");
+    const visualizationBtn = document.getElementById("visualizationBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const coordinateBtn = document.getElementById("coordinateBtn");
+    const limitModeBtn = document.getElementById("limitModeBtn");
+    const turnModeBtn = document.getElementById("turnModeBtn");
+    const videoConfigBtn = document.getElementById("videoConfigBtn");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const settingsToggleBtn = document.getElementById("settingsToggleBtn");
+    const settingsToggleIcon = document.getElementById("settingsToggleIcon");
+    const zoneOffsetLabel = document.getElementById("zoneOffsetLabel");
+    const zoneSizeLabel = document.getElementById("zoneSizeLabel");
+    const zoneSizeMinusBtn = document.getElementById("zoneSizeMinusBtn");
+    const zoneSizePlusBtn = document.getElementById("zoneSizePlusBtn");
+    const zoneUpBtn = document.getElementById("zoneUpBtn");
+    const zoneDownBtn = document.getElementById("zoneDownBtn");
+    const zoneLeftBtn = document.getElementById("zoneLeftBtn");
+    const zoneRightBtn = document.getElementById("zoneRightBtn");
+    const zoneMmInput = document.getElementById("zoneMmInput");
+    const zoneResetBtn = document.getElementById("zoneResetBtn");
+    const detectionConfInput = document.getElementById("detectionConfInput");
+    const robotRotationInput = document.getElementById("robotRotationInput");
+    const robotInvertXInput = document.getElementById("robotInvertXInput");
+    const robotInvertYInput = document.getElementById("robotInvertYInput");
+    const robotInvertZInput = document.getElementById("robotInvertZInput");
+    const robotSettingsSaveBtn = document.getElementById("robotSettingsSaveBtn");
+    const rotationAxesOriginal = document.getElementById("rotationAxesOriginal");
+    const rotationAxesDraft = document.getElementById("rotationAxesDraft");
+    const rotationKnob = document.getElementById("rotationKnob");
+    const rotationKnobValue = document.getElementById("rotationKnobValue");
+    const rotationBaseLabel = document.getElementById("rotationBaseLabel");
+    const rotationDraftLabel = document.getElementById("rotationDraftLabel");
+    const coordinatePanel = document.getElementById("coordinatePanel");
+    const limitPanel = document.getElementById("limitPanel");
+    const turnPanel = document.getElementById("turnPanel");
+    const coordinateMap = document.getElementById("coordinateMap");
+    const coordinateMarker = document.getElementById("coordinateMarker");
+    const coordinateZSlider = document.getElementById("coordinateZSlider");
+    const coordinateZLabel = document.getElementById("coordinateZLabel");
+    const coordinateRangeLabel = document.getElementById("coordinateRangeLabel");
+    const coordinateInputX = document.getElementById("coordinateInputX");
+    const coordinateInputY = document.getElementById("coordinateInputY");
+    const coordinateInputZ = document.getElementById("coordinateInputZ");
+    const coordinateDurationLabel = document.getElementById("coordinateDurationLabel");
+    const coordinateInputDuration = document.getElementById("coordinateInputDuration");
+    const coordinateLastLabel = document.getElementById("coordinateLastLabel");
+    const coordinateSendBtn = document.getElementById("coordinateSendBtn");
+    const limitPortLabel = document.getElementById("limitPortLabel");
+    const limitPreviewValue = document.getElementById("limitPreviewValue");
+    const limitChassisPolygon = document.getElementById("limitChassisPolygon");
+    const limitWheel1 = document.getElementById("limitWheel1");
+    const limitWheel2 = document.getElementById("limitWheel2");
+    const limitWheel3 = document.getElementById("limitWheel3");
+    const limitWheel4 = document.getElementById("limitWheel4");
+    const limitCurrentPositionLabel = document.getElementById("limitCurrentPositionLabel");
+    const limitTargetPositionInput = document.getElementById("limitTargetPositionInput");
+    const limitRpmSelect = document.getElementById("limitRpmSelect");
+    const limitPositionSlider = document.getElementById("limitPositionSlider");
+    const limitSendBtn = document.getElementById("limitSendBtn");
+    const limitRefreshBtn = document.getElementById("limitRefreshBtn");
+    const limitMotor1Input = document.getElementById("limitMotor1Input");
+    const limitMotor2Input = document.getElementById("limitMotor2Input");
+    const limitMotor3Input = document.getElementById("limitMotor3Input");
+    const limitMotor4Input = document.getElementById("limitMotor4Input");
+    const limitJogInBtn = document.getElementById("limitJogInBtn");
+    const limitJogOutBtn = document.getElementById("limitJogOutBtn");
+    const limitJogStopBtn = document.getElementById("limitJogStopBtn");
+    const turnPortLabel = document.getElementById("turnPortLabel");
+    const turnCurrentAngleBadge = document.getElementById("turnCurrentAngleBadge");
+    const turnCurrentNeedle = document.getElementById("turnCurrentNeedle");
+    const turnTargetNeedle = document.getElementById("turnTargetNeedle");
+    const turnCurrentAngleLabel = document.getElementById("turnCurrentAngleLabel");
+    const turnTargetAngleInput = document.getElementById("turnTargetAngleInput");
+    const turnDeltaAngleLabel = document.getElementById("turnDeltaAngleLabel");
+    const turnAngleSlider = document.getElementById("turnAngleSlider");
+    const turnCrabModeInput = document.getElementById("turnCrabModeInput");
+    const turnSendBtn = document.getElementById("turnSendBtn");
+    const turnRefreshBtn = document.getElementById("turnRefreshBtn");
+    const turnCalibrateBtn = document.getElementById("turnCalibrateBtn");
+    const logsBlock = document.getElementById("logsBlock");
+    const ZONE_STEP_PX = 12;
+    const ZONE_SIZE_STEP_PX = 18;
+    const TURN_MIN_ANGLE = -90;
+    const TURN_MAX_ANGLE = 90;
+    let detectionsWS = null;
+    let allowWsReconnect = true;
+    let selectedPort = "COM19";
+    let coordinateMode = false;
+    let limitMode = false;
+    let turnMode = false;
+    let zoneData = { x: 0, y: 0, size_px: 420, size_mm: 138 };
+    let robotSettings = { xy_rotation_deg: 95, invert_x: false, invert_y: false, invert_z: false, detection_conf: 0.25 };
+    let baseRobotRotationDeg = 95;
+    let draftRobotRotationDeg = 95;
+    let knobPointerId = null;
+    let knobDragActive = false;
+    let coordinateRangeMm = 69;
+    let coordinateTarget = { x: 0, y: 0, z: -180 };
+    let coordinateDurationMs = 12000;
+    let manualRobotState = { has_last: false, x_mm: 0, y_mm: 0, z_mm: -180, z_min_mm: -520, z_max_mm: -180 };
+    let coordinateDragActive = false;
+    let coordinateDragPointerId = null;
+    let logsCollapsed = false;
+    let settingsCollapsed = true;
+    let limitJogActive = false;
+    let limitJogPending = false;
+    let limitLinearState = { current_position: 0, target_position: 0, min_position: 0, max_position: 20, rpm: 60 };
+    let turnAbsoluteState = { current_angle: 0, target_angle: 0, delta_angle: 0, min_angle: TURN_MIN_ANGLE, max_angle: TURN_MAX_ANGLE };
+
+    function appendLog(text) {
+      if (!logsBlock) return;
+      logsBlock.textContent += `\n${text}`;
+      logsBlock.scrollTop = logsBlock.scrollHeight;
+    }
+
+    function applyLogsPanelState(collapsed, persist = true) {
+      logsCollapsed = Boolean(collapsed);
+      document.body.classList.toggle("logs-collapsed", logsCollapsed);
+      leftBlock?.classList.toggle("is-collapsed", logsCollapsed);
+
+      const label = logsCollapsed ? "Показать логи" : "Скрыть логи";
+      if (logsToggleBtn) {
+        logsToggleBtn.setAttribute("aria-expanded", String(!logsCollapsed));
+        logsToggleBtn.setAttribute("aria-label", label);
+        logsToggleBtn.title = label;
+      }
+      if (logsToggleIcon) {
+        logsToggleIcon.textContent = logsCollapsed ? "›" : "‹";
+      }
+
+      if (!persist) return;
+      try {
+        window.localStorage.setItem("logsCollapsed", logsCollapsed ? "1" : "0");
+      } catch (_) {}
+    }
+
+    function restoreLogsPanelState() {
+      let stored = "0";
+      try {
+        stored = window.localStorage.getItem("logsCollapsed") || "0";
+      } catch (_) {}
+      applyLogsPanelState(stored === "1", false);
+    }
+
+    function applySettingsPanelState(collapsed, persist = true) {
+      settingsCollapsed = Boolean(collapsed);
+      document.body.classList.toggle("settings-collapsed", settingsCollapsed);
+      settingsPanel?.classList.toggle("is-collapsed", settingsCollapsed);
+      videoConfigBtn?.classList.toggle("active", !settingsCollapsed);
+      videoConfigBtn?.setAttribute("aria-pressed", String(!settingsCollapsed));
+
+      const label = settingsCollapsed ? "Показать настройки" : "Скрыть настройки";
+      if (settingsToggleBtn) {
+        settingsToggleBtn.setAttribute("aria-expanded", String(!settingsCollapsed));
+        settingsToggleBtn.setAttribute("aria-label", label);
+        settingsToggleBtn.title = label;
+      }
+      if (settingsToggleIcon) {
+        settingsToggleIcon.textContent = settingsCollapsed ? "‹" : "›";
+      }
+
+      if (!persist) return;
+      try {
+        window.localStorage.setItem("settingsCollapsed", settingsCollapsed ? "1" : "0");
+      } catch (_) {}
+    }
+
+    function restoreSettingsPanelState() {
+      let stored = "1";
+      try {
+        stored = window.localStorage.getItem("settingsCollapsed") || "1";
+      } catch (_) {}
+      applySettingsPanelState(stored === "1", false);
+    }
+
+    function extractDetail(data, fallback = "") {
+      if (typeof data?.error?.message === "string" && data.error.message.trim()) {
+        return data.error.message.trim();
+      }
+      if (typeof data?.detail?.message === "string" && data.detail.message.trim()) {
+        return data.detail.message.trim();
+      }
+      if (typeof data?.detail === "string" && data.detail.trim()) {
+        return data.detail.trim();
+      }
+      if (typeof data?.message === "string" && data.message.trim()) {
+        return data.message.trim();
+      }
+      if (typeof data?.status === "string" && data.status.trim() && fallback) {
+        return fallback;
+      }
+      return fallback;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function formatNumber(value, digits = 1) {
+      const numeric = Number(value);
+      const safe = Number.isFinite(numeric) ? numeric : 0;
+      const factor = 10 ** digits;
+      const rounded = Math.round(safe * factor) / factor;
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits);
+    }
+
+    function formatCm(value) {
+      return `${formatNumber(value, 1)} см`;
+    }
+
+    function formatAngle(value) {
+      return `${formatNumber(value, 1)}°`;
+    }
+
+    function normalizeDurationMs(value) {
+      const parsed = Number(value);
+      if (!Number.isFinite(parsed)) return coordinateDurationMs;
+      return Math.round(clamp(parsed, 500, 60000));
+    }
+
+    function updateDurationVisual() {
+      const ms = Number(coordinateDurationMs);
+      let danger = 0;
+      if (ms <= 2000) {
+        danger = 1;
+      } else if (ms < 5000) {
+        danger = (5000 - ms) / 3000;
+      }
+      danger = clamp(danger, 0, 1);
+
+      const baseR = 214;
+      const baseG = 236;
+      const baseB = 255;
+      const warnR = 255;
+      const warnG = 40;
+      const warnB = 40;
+      const r = Math.round(baseR + (warnR - baseR) * danger);
+      const g = Math.round(baseG + (warnG - baseG) * danger);
+      const b = Math.round(baseB + (warnB - baseB) * danger);
+      const color = `rgb(${r}, ${g}, ${b})`;
+
+      if (coordinateDurationLabel) {
+        coordinateDurationLabel.style.color = color;
+      }
+      if (coordinateInputDuration) {
+        coordinateInputDuration.style.borderColor = color;
+      }
+    }
+
+    function applyDurationInput(commit = false) {
+      if (!coordinateInputDuration) return;
+      const parsed = Number(coordinateInputDuration.value);
+      if (Number.isFinite(parsed)) {
+        coordinateDurationMs = normalizeDurationMs(parsed);
+      }
+      if (commit || !Number.isFinite(parsed)) {
+        coordinateInputDuration.value = String(Math.round(coordinateDurationMs));
+      }
+      updateDurationVisual();
+    }
+
+    function normalizeManualRobotState(raw) {
+      const zMin = Number(raw?.z_min_mm ?? -520);
+      const zMax = Number(raw?.z_max_mm ?? -180);
+      const minZ = Number.isFinite(zMin) ? zMin : -520;
+      const maxZ = Number.isFinite(zMax) ? zMax : -180;
+      return {
+        has_last: Boolean(raw?.has_last),
+        x_mm: Number(raw?.x_mm ?? 0),
+        y_mm: Number(raw?.y_mm ?? 0),
+        z_mm: Number(raw?.z_mm ?? maxZ),
+        z_min_mm: Math.min(minZ, maxZ),
+        z_max_mm: Math.max(minZ, maxZ),
+      };
+    }
+
+    function normalizeRotationDeg(value, fallback = 95) {
+      const numeric = Number(value);
+      const safe = Number.isFinite(numeric) ? numeric : Number(fallback);
+      return Math.round(clamp(safe, -360, 360) * 10) / 10;
+    }
+
+    function rotationDegToKnobDeg(rotationDeg) {
+      const ratio = (normalizeRotationDeg(rotationDeg) + 360) / 720;
+      return -135 + ratio * 270;
+    }
+
+    function knobDegToRotationDeg(knobDeg) {
+      const clampedKnob = clamp(Number(knobDeg), -135, 135);
+      const ratio = (clampedKnob + 135) / 270;
+      return normalizeRotationDeg(-360 + ratio * 720, draftRobotRotationDeg);
+    }
+
+    function updateRotationVisualization() {
+      const baseDeg = normalizeRotationDeg(baseRobotRotationDeg, 95);
+      const draftDeg = normalizeRotationDeg(draftRobotRotationDeg, baseDeg);
+      const knobDeg = rotationDegToKnobDeg(draftDeg);
+
+      if (rotationAxesOriginal) {
+        rotationAxesOriginal.style.transform = `rotate(${baseDeg}deg)`;
+      }
+      if (rotationAxesDraft) {
+        rotationAxesDraft.style.transform = `rotate(${draftDeg}deg)`;
+      }
+      if (rotationBaseLabel) {
+        rotationBaseLabel.textContent = `Исходный: ${baseDeg.toFixed(1)}°`;
+      }
+      if (rotationDraftLabel) {
+        rotationDraftLabel.textContent = `Новый: ${draftDeg.toFixed(1)}°`;
+      }
+      if (rotationKnobValue) {
+        rotationKnobValue.textContent = `${draftDeg.toFixed(1)}°`;
+      }
+      if (rotationKnob) {
+        rotationKnob.style.setProperty("--knob-angle", `${knobDeg}deg`);
+        rotationKnob.setAttribute("aria-valuenow", String(Math.round(draftDeg * 10) / 10));
+      }
+    }
+
+    function setDraftRotation(value, { syncInput = true } = {}) {
+      draftRobotRotationDeg = normalizeRotationDeg(value, baseRobotRotationDeg);
+      if (syncInput && robotRotationInput && document.activeElement !== robotRotationInput) {
+        robotRotationInput.value = String(draftRobotRotationDeg.toFixed(1));
+      }
+      updateRotationVisualization();
+    }
+
+    function setKnobDragging(active) {
+      knobDragActive = Boolean(active);
+      if (rotationKnob) {
+        rotationKnob.classList.toggle("is-dragging", knobDragActive);
+      }
+    }
+
+    function setDraftRotationFromPointer(clientX, clientY) {
+      if (!rotationKnob) return;
+      const rect = rotationKnob.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return;
+      const rawDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+      setDraftRotation(knobDegToRotationDeg(rawDeg), { syncInput: true });
+    }
+
+    function stopKnobDrag(pointerId = null) {
+      if (!knobDragActive) return;
+      if (pointerId !== null && knobPointerId !== null && pointerId !== knobPointerId) {
+        return;
+      }
+      setKnobDragging(false);
+      if (rotationKnob && knobPointerId !== null && rotationKnob.hasPointerCapture?.(knobPointerId)) {
+        rotationKnob.releasePointerCapture(knobPointerId);
+      }
+      knobPointerId = null;
+    }
+
+    function setPanelVisible(panel, visible, displayMode = "block") {
+      if (!panel) return;
+      const hideTimerKey = "__hideTimer";
+      if (panel[hideTimerKey]) {
+        clearTimeout(panel[hideTimerKey]);
+        panel[hideTimerKey] = null;
+      }
+
+      if (visible) {
+        panel.classList.remove("d-none");
+        panel.style.display = displayMode;
+        requestAnimationFrame(() => {
+          panel.classList.add("is-active");
+        });
+        return;
+      }
+
+      panel.classList.remove("is-active");
+      panel[hideTimerKey] = setTimeout(() => {
+        panel.style.display = "none";
+        panel.classList.add("d-none");
+      }, 220);
+    }
+
+    function normalizeDetectionConf(value) {
+      const numeric = Number(value);
+      const safe = Number.isFinite(numeric) ? numeric : Number(robotSettings?.detection_conf ?? 0.25);
+      return Math.round(clamp(safe, 0.01, 1.0) * 10000) / 10000;
+    }
+
+    function normalizeRobotSettings(raw) {
+      return {
+        xy_rotation_deg: normalizeRotationDeg(raw?.xy_rotation_deg, Number(robotSettings?.xy_rotation_deg ?? 95)),
+        invert_x: Boolean(raw?.invert_x),
+        invert_y: Boolean(raw?.invert_y),
+        invert_z: Boolean(raw?.invert_z),
+        detection_conf: normalizeDetectionConf(raw?.detection_conf),
+      };
+    }
+
+    function applyRobotSettingsInputs({ preserveDraft = false } = {}) {
+      const targetDraft = preserveDraft ? draftRobotRotationDeg : robotSettings.xy_rotation_deg;
+      baseRobotRotationDeg = normalizeRotationDeg(robotSettings.xy_rotation_deg, 95);
+      draftRobotRotationDeg = normalizeRotationDeg(targetDraft, baseRobotRotationDeg);
+
+      if (detectionConfInput && document.activeElement !== detectionConfInput) {
+        detectionConfInput.value = String(normalizeDetectionConf(robotSettings.detection_conf));
+      }
+      if (robotRotationInput && document.activeElement !== robotRotationInput) {
+        robotRotationInput.value = String(draftRobotRotationDeg.toFixed(1));
+      }
+      if (robotInvertXInput) {
+        robotInvertXInput.checked = Boolean(robotSettings.invert_x);
+      }
+      if (robotInvertYInput) {
+        robotInvertYInput.checked = Boolean(robotSettings.invert_y);
+      }
+      if (robotInvertZInput) {
+        robotInvertZInput.checked = Boolean(robotSettings.invert_z);
+      }
+      updateRotationVisualization();
+    }
+
+    function getRobotDetectionConf() {
+      if (detectionConfInput) {
+        robotSettings.detection_conf = normalizeDetectionConf(detectionConfInput.value);
+      }
+      return normalizeDetectionConf(robotSettings.detection_conf);
+    }
+
+    function updateCoordinateRangeFromZone() {
+      const half = Number(zoneData?.size_mm ?? 138) / 2;
+      coordinateRangeMm = Math.max(1, Math.round((Number.isFinite(half) ? half : 69) * 10) / 10);
+      if (coordinateRangeLabel) {
+        coordinateRangeLabel.textContent = `Range X/Y: ±${coordinateRangeMm.toFixed(1)} mm`;
+      }
+      if (coordinateInputX) {
+        coordinateInputX.min = String(Math.round(-coordinateRangeMm));
+        coordinateInputX.max = String(Math.round(coordinateRangeMm));
+      }
+      if (coordinateInputY) {
+        coordinateInputY.min = String(Math.round(-coordinateRangeMm));
+        coordinateInputY.max = String(Math.round(coordinateRangeMm));
+      }
+      coordinateTarget.x = clamp(Math.round(coordinateTarget.x), -coordinateRangeMm, coordinateRangeMm);
+      coordinateTarget.y = clamp(Math.round(coordinateTarget.y), -coordinateRangeMm, coordinateRangeMm);
+    }
+
+    function updateCoordinateMarker() {
+      if (!coordinateMarker) return;
+      const range = Math.max(1, coordinateRangeMm);
+      const x = clamp(Number(coordinateTarget.x), -range, range);
+      const y = clamp(Number(coordinateTarget.y), -range, range);
+      const nx = (x + range) / (2 * range);
+      const ny = (range - y) / (2 * range);
+      coordinateMarker.style.left = `${(nx * 100).toFixed(2)}%`;
+      coordinateMarker.style.top = `${(ny * 100).toFixed(2)}%`;
+    }
+
+    function updateCoordinateTargetLabel() {
+      const range = Math.max(1, Number(coordinateRangeMm) || 1);
+      coordinateTarget.x = clamp(Math.round(Number(coordinateTarget.x) || 0), -range, range);
+      coordinateTarget.y = clamp(Math.round(Number(coordinateTarget.y) || 0), -range, range);
+      coordinateTarget.z = clamp(
+        Math.round(Number(coordinateTarget.z) || 0),
+        Number(manualRobotState?.z_min_mm ?? -520),
+        Number(manualRobotState?.z_max_mm ?? -180),
+      );
+      if (coordinateInputX && document.activeElement !== coordinateInputX) {
+        coordinateInputX.value = String(Math.round(coordinateTarget.x));
+      }
+      if (coordinateInputY && document.activeElement !== coordinateInputY) {
+        coordinateInputY.value = String(Math.round(coordinateTarget.y));
+      }
+      if (coordinateInputZ && document.activeElement !== coordinateInputZ) {
+        coordinateInputZ.value = String(Math.round(coordinateTarget.z));
+      }
+      if (coordinateZSlider && Number(coordinateZSlider.value) !== Math.round(coordinateTarget.z)) {
+        coordinateZSlider.value = String(Math.round(coordinateTarget.z));
+      }
+      if (coordinateZLabel) {
+        coordinateZLabel.textContent = `Z: ${Math.round(coordinateTarget.z)} mm`;
+      }
+      updateCoordinateMarker();
+    }
+
+    function updateCoordinateLastLabel() {
+      if (!coordinateLastLabel) return;
+      if (!manualRobotState.has_last) {
+        coordinateLastLabel.textContent = "Last: calibration required (go work)";
+        return;
+      }
+      coordinateLastLabel.textContent = `Last: X=${Math.round(manualRobotState.x_mm)} Y=${Math.round(manualRobotState.y_mm)} Z=${Math.round(manualRobotState.z_mm)}`;
+    }
+
+    function applyManualState(raw) {
+      manualRobotState = normalizeManualRobotState(raw);
+      if (manualRobotState.has_last) {
+        coordinateTarget.x = Math.round(manualRobotState.x_mm);
+        coordinateTarget.y = Math.round(manualRobotState.y_mm);
+        coordinateTarget.z = Math.round(manualRobotState.z_mm);
+      }
+      if (coordinateZSlider) {
+        coordinateZSlider.min = String(Math.round(manualRobotState.z_min_mm));
+        coordinateZSlider.max = String(Math.round(manualRobotState.z_max_mm));
+      }
+      if (coordinateInputZ) {
+        coordinateInputZ.min = String(Math.round(manualRobotState.z_min_mm));
+        coordinateInputZ.max = String(Math.round(manualRobotState.z_max_mm));
+      }
+      coordinateTarget.z = clamp(
+        Number(coordinateTarget.z),
+        manualRobotState.z_min_mm,
+        manualRobotState.z_max_mm,
+      );
+      if (coordinateZSlider) {
+        coordinateZSlider.value = String(Math.round(coordinateTarget.z));
+      }
+      updateCoordinateTargetLabel();
+      updateCoordinateLastLabel();
+    }
+
+    async function fetchManualRobotState() {
+      try {
+        const response = await fetch(`${API_V1}/delta/state`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const pose = data?.pose_mm || {};
+        applyManualState({
+          has_last: Boolean(data?.homed),
+          x_mm: Number(pose?.x ?? 0),
+          y_mm: Number(pose?.y ?? 0),
+          z_mm: Number(pose?.z ?? -180),
+          z_min_mm: Number(data?.z_min_mm ?? -520),
+          z_max_mm: Number(data?.z_max_mm ?? -180),
+        });
+      } catch (_) {}
+    }
+
+    function setModeButtonState(button, active) {
+      if (!button) return;
+      button.classList.toggle("active", Boolean(active));
+      button.setAttribute("aria-pressed", String(Boolean(active)));
+    }
+
+    function updateCenterModeButtons() {
+      setModeButtonState(coordinateBtn, coordinateMode);
+      setModeButtonState(limitModeBtn, limitMode);
+      setModeButtonState(turnModeBtn, turnMode);
+    }
+
+    function showCoordinateMode() {
+      coordinateMode = true;
+      limitMode = false;
+      turnMode = false;
+      if (videoFrame) videoFrame.classList.add("d-none");
+      setPanelVisible(coordinatePanel, true, "flex");
+      setPanelVisible(limitPanel, false);
+      setPanelVisible(turnPanel, false);
+      updateCenterModeButtons();
+    }
+
+    function showLimitMode() {
+      coordinateMode = false;
+      limitMode = true;
+      turnMode = false;
+      if (videoFrame) videoFrame.classList.add("d-none");
+      setPanelVisible(coordinatePanel, false, "flex");
+      setPanelVisible(limitPanel, true);
+      setPanelVisible(turnPanel, false);
+      updateCenterModeButtons();
+    }
+
+    function showTurnMode() {
+      coordinateMode = false;
+      limitMode = false;
+      turnMode = true;
+      if (videoFrame) videoFrame.classList.add("d-none");
+      setPanelVisible(coordinatePanel, false, "flex");
+      setPanelVisible(limitPanel, false);
+      setPanelVisible(turnPanel, true);
+      updateCenterModeButtons();
+    }
+
+    function showSettingsMode() {
+      applySettingsPanelState(false);
+    }
+
+    function showVideoMode() {
+      coordinateMode = false;
+      limitMode = false;
+      turnMode = false;
+      if (videoFrame) videoFrame.classList.remove("d-none");
+      setPanelVisible(coordinatePanel, false, "flex");
+      setPanelVisible(limitPanel, false);
+      setPanelVisible(turnPanel, false);
+      updateCenterModeButtons();
+    }
+
+    async function enterSettingsMode() {
+      showSettingsMode();
+      await refreshZoneConfig();
+      await loadRobotSettings();
+      updateRotationVisualization();
+      appendLog("Settings panel opened.");
+    }
+
+    async function enterCoordinateMode() {
+      await stopVideoStream();
+      showCoordinateMode();
+      await refreshZoneConfig();
+      await fetchManualRobotState();
+      updateCoordinateRangeFromZone();
+      updateCoordinateTargetLabel();
+      appendLog("Coordinate mode enabled.");
+    }
+
+    async function enterLimitMode() {
+      await stopVideoStream();
+      showLimitMode();
+      await refreshLimitLinearState({ preserveTarget: false, silent: true });
+      appendLog("Limit mechanism mode enabled.");
+    }
+
+    async function enterTurnMode() {
+      await stopVideoStream();
+      showTurnMode();
+      await refreshTurnState({ preserveTarget: false, silent: true });
+      appendLog("Turn mechanism mode enabled.");
+    }
+
+    function setCoordinateTargetFromClientPoint(clientX, clientY) {
+      if (!coordinateMap) return;
+      const rect = coordinateMap.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const nx = clamp((clientX - rect.left) / rect.width, 0, 1);
+      const ny = clamp((clientY - rect.top) / rect.height, 0, 1);
+      const range = Math.max(1, coordinateRangeMm);
+      coordinateTarget.x = Math.round((nx * 2 - 1) * range);
+      coordinateTarget.y = Math.round((1 - ny * 2) * range);
+      updateCoordinateTargetLabel();
+    }
+
+    function applyCoordinateInputs() {
+      const range = Math.max(1, coordinateRangeMm);
+      const x = Number(coordinateInputX?.value);
+      const y = Number(coordinateInputY?.value);
+      const z = Number(coordinateInputZ?.value);
+      if (Number.isFinite(x)) {
+        coordinateTarget.x = clamp(Math.round(x), -range, range);
+      }
+      if (Number.isFinite(y)) {
+        coordinateTarget.y = clamp(Math.round(y), -range, range);
+      }
+      if (Number.isFinite(z)) {
+        coordinateTarget.z = clamp(
+          Math.round(z),
+          Number(manualRobotState?.z_min_mm ?? -520),
+          Number(manualRobotState?.z_max_mm ?? -180),
+        );
+      }
+      updateCoordinateTargetLabel();
+    }
+
+    function setCoordinateDragging(active) {
+      coordinateDragActive = Boolean(active);
+      if (coordinateMap) {
+        coordinateMap.classList.toggle("is-dragging", coordinateDragActive);
+      }
+    }
+
+    function stopCoordinateDrag(pointerId) {
+      if (!coordinateDragActive) return;
+      if (pointerId !== undefined && pointerId !== null && coordinateDragPointerId !== null && pointerId !== coordinateDragPointerId) {
+        return;
+      }
+      setCoordinateDragging(false);
+      coordinateDragPointerId = null;
+      if (coordinateMap && pointerId !== undefined && pointerId !== null && coordinateMap.hasPointerCapture?.(pointerId)) {
+        coordinateMap.releasePointerCapture(pointerId);
+      }
+    }
+
+    function setSelectedPortLabel(portName) {
+      selectedPort = String(portName || "").trim() || "-";
+      if (selectedPortLabel) {
+        selectedPortLabel.textContent = selectedPort;
+      }
+      if (limitPortLabel) {
+        limitPortLabel.textContent = selectedPort;
+      }
+      if (turnPortLabel) {
+        turnPortLabel.textContent = selectedPort;
+      }
+    }
+
+    function normalizeLimitPosition(value, fallback = limitLinearState.target_position) {
+      const numeric = Number(value);
+      const minValue = Number(limitLinearState.min_position ?? 0);
+      const maxValue = Number(limitLinearState.max_position ?? 20);
+      const safeFallback = Number.isFinite(Number(fallback)) ? Number(fallback) : minValue;
+      const safeNumeric = Number.isFinite(numeric) ? numeric : safeFallback;
+      return Math.round(clamp(safeNumeric, minValue, maxValue) * 10) / 10;
+    }
+
+    function normalizeTurnAngle(value, fallback = turnAbsoluteState.target_angle) {
+      const numeric = Number(value);
+      const safeFallback = Number.isFinite(Number(fallback)) ? Number(fallback) : 0;
+      const safeNumeric = Number.isFinite(numeric) ? numeric : safeFallback;
+      const minAngle = Number.isFinite(Number(turnAbsoluteState.min_angle)) ? Number(turnAbsoluteState.min_angle) : TURN_MIN_ANGLE;
+      const maxAngle = Number.isFinite(Number(turnAbsoluteState.max_angle)) ? Number(turnAbsoluteState.max_angle) : TURN_MAX_ANGLE;
+      return Math.round(clamp(safeNumeric, minAngle, maxAngle) * 10) / 10;
+    }
+
+    function buildTurnWheelTargets(targetAngle, crabMode) {
+      const normalizedTarget = normalizeTurnAngle(targetAngle, turnAbsoluteState.target_angle);
+      if (crabMode) {
+        return {
+          wheel_1_deg: normalizedTarget,
+          wheel_2_deg: normalizedTarget,
+          wheel_3_deg: normalizedTarget,
+          wheel_4_deg: normalizedTarget,
+        };
+      }
+      return {
+        wheel_1_deg: normalizedTarget,
+        wheel_2_deg: normalizedTarget,
+        wheel_3_deg: -normalizedTarget,
+        wheel_4_deg: -normalizedTarget,
+      };
+    }
+
+    function updateLimitMechanismVisual(positionValue) {
+      const minValue = Number(limitLinearState.min_position ?? 0);
+      const maxValue = Number(limitLinearState.max_position ?? 20);
+      const span = Math.max(0.1, maxValue - minValue);
+      const normalized = (normalizeLimitPosition(positionValue, minValue) - minValue) / span;
+      const offsetX = normalized * 30;
+
+      limitWheel1?.setAttribute("x", String(100 - offsetX - 15));
+      limitWheel2?.setAttribute("x", String(300 + offsetX - 15));
+      limitWheel3?.setAttribute("x", String(300 + offsetX - 15));
+      limitWheel4?.setAttribute("x", String(100 - offsetX - 15));
+      limitChassisPolygon?.setAttribute(
+        "points",
+        [
+          `${100 - offsetX},40`,
+          `${300 + offsetX},40`,
+          `${300 + offsetX},200`,
+          `${100 - offsetX},200`,
+        ].join(" "),
+      );
+      if (limitPreviewValue) {
+        limitPreviewValue.textContent = formatCm(positionValue);
+      }
+    }
+
+    function setLimitTargetPosition(value, { syncSlider = true, syncInput = true } = {}) {
+      limitLinearState.target_position = normalizeLimitPosition(value, limitLinearState.target_position);
+      const textValue = formatNumber(limitLinearState.target_position, 1);
+      if (syncInput && limitTargetPositionInput) {
+        limitTargetPositionInput.value = textValue;
+      }
+      if (syncSlider && limitPositionSlider) {
+        limitPositionSlider.value = textValue;
+      }
+      updateLimitMechanismVisual(limitLinearState.target_position);
+    }
+
+    function applyLimitWheelSelection() {
+      [
+        [limitWheel1, limitMotor1Input],
+        [limitWheel2, limitMotor2Input],
+        [limitWheel3, limitMotor3Input],
+        [limitWheel4, limitMotor4Input],
+      ].forEach(([wheel, input]) => {
+        if (!wheel || !input) return;
+        const isActive = Boolean(input.checked);
+        wheel.classList.toggle("is-selected", isActive);
+        wheel.setAttribute("fill", isActive ? "#53a6ff" : "#1a2f45");
+      });
+    }
+
+    function applyLimitLinearState(raw, { preserveTarget = false } = {}) {
+      const currentPositionRaw = raw?.current_position ?? raw?.current_position_cm ?? raw?.current_width_cm;
+      const targetPositionRaw = raw?.target_position ?? raw?.target_position_cm ?? raw?.target_width_cm;
+      const minPositionRaw = raw?.min_position ?? raw?.min_position_cm;
+      const maxPositionRaw = raw?.max_position ?? raw?.max_position_cm;
+      limitLinearState = {
+        current_position: normalizeLimitPosition(currentPositionRaw ?? limitLinearState.current_position, limitLinearState.current_position),
+        target_position: limitLinearState.target_position,
+        min_position: Number.isFinite(Number(minPositionRaw)) ? Number(minPositionRaw) : Number(limitLinearState.min_position ?? 0),
+        max_position: Number.isFinite(Number(maxPositionRaw)) ? Number(maxPositionRaw) : Number(limitLinearState.max_position ?? 20),
+        rpm: Number.isFinite(Number(raw?.rpm)) ? Math.round(Number(raw.rpm)) : Number(limitLinearState.rpm ?? 60),
+      };
+
+      const fallbackTarget = preserveTarget ? limitLinearState.target_position : limitLinearState.current_position;
+      limitLinearState.target_position = normalizeLimitPosition(targetPositionRaw ?? fallbackTarget, fallbackTarget);
+
+      if (limitCurrentPositionLabel) {
+        limitCurrentPositionLabel.value = formatCm(limitLinearState.current_position);
+      }
+      if (limitTargetPositionInput) {
+        limitTargetPositionInput.min = String(limitLinearState.min_position);
+        limitTargetPositionInput.max = String(limitLinearState.max_position);
+      }
+      if (limitPositionSlider) {
+        limitPositionSlider.min = String(limitLinearState.min_position);
+        limitPositionSlider.max = String(limitLinearState.max_position);
+      }
+      if (limitRpmSelect) {
+        limitRpmSelect.value = String(limitLinearState.rpm);
+      }
+      setLimitTargetPosition(limitLinearState.target_position);
+    }
+
+    function updateTurnDial(currentAngle, targetAngle) {
+      if (turnCurrentNeedle) {
+        turnCurrentNeedle.style.transform = `translate(-50%, -100%) rotate(${normalizeTurnAngle(currentAngle, 0)}deg)`;
+      }
+      if (turnTargetNeedle) {
+        turnTargetNeedle.style.transform = `translate(-50%, -100%) rotate(${normalizeTurnAngle(targetAngle, 0)}deg)`;
+      }
+    }
+
+    function setTurnTargetAngle(value, { syncSlider = true, syncInput = true } = {}) {
+      turnAbsoluteState.target_angle = normalizeTurnAngle(value, turnAbsoluteState.target_angle);
+      turnAbsoluteState.delta_angle = Math.round((turnAbsoluteState.target_angle - turnAbsoluteState.current_angle) * 10) / 10;
+
+      if (syncInput && turnTargetAngleInput) {
+        turnTargetAngleInput.value = formatNumber(turnAbsoluteState.target_angle, 1);
+      }
+      if (syncSlider && turnAngleSlider) {
+        turnAngleSlider.value = formatNumber(turnAbsoluteState.target_angle, 1);
+      }
+      if (turnDeltaAngleLabel) {
+        turnDeltaAngleLabel.value = formatAngle(turnAbsoluteState.delta_angle);
+      }
+      updateTurnDial(turnAbsoluteState.current_angle, turnAbsoluteState.target_angle);
+    }
+
+    function applyTurnState(raw, { preserveTarget = false } = {}) {
+      const minAngleRaw = raw?.min_angle ?? raw?.min_angle_deg;
+      const maxAngleRaw = raw?.max_angle ?? raw?.max_angle_deg;
+      const currentAngleRaw = raw?.current_angle ?? raw?.current_angle_deg;
+      const targetAngleRaw = raw?.target_angle ?? raw?.target_angle_deg;
+      turnAbsoluteState.min_angle = Number.isFinite(Number(minAngleRaw)) ? Number(minAngleRaw) : Number(turnAbsoluteState.min_angle ?? TURN_MIN_ANGLE);
+      turnAbsoluteState.max_angle = Number.isFinite(Number(maxAngleRaw)) ? Number(maxAngleRaw) : Number(turnAbsoluteState.max_angle ?? TURN_MAX_ANGLE);
+      const currentAngle = normalizeTurnAngle(currentAngleRaw ?? turnAbsoluteState.current_angle, turnAbsoluteState.current_angle);
+      const fallbackTarget = preserveTarget ? turnAbsoluteState.target_angle : currentAngle;
+      const targetAngle = normalizeTurnAngle(targetAngleRaw ?? fallbackTarget, fallbackTarget);
+
+      turnAbsoluteState.current_angle = currentAngle;
+      turnAbsoluteState.target_angle = targetAngle;
+      turnAbsoluteState.delta_angle = Math.round((targetAngle - currentAngle) * 10) / 10;
+
+      if (turnCurrentAngleLabel) {
+        turnCurrentAngleLabel.value = formatAngle(currentAngle);
+      }
+      if (turnCurrentAngleBadge) {
+        turnCurrentAngleBadge.textContent = formatAngle(currentAngle);
+      }
+      if (turnTargetAngleInput) {
+        turnTargetAngleInput.min = String(turnAbsoluteState.min_angle);
+        turnTargetAngleInput.max = String(turnAbsoluteState.max_angle);
+      }
+      if (turnAngleSlider) {
+        turnAngleSlider.min = String(turnAbsoluteState.min_angle);
+        turnAngleSlider.max = String(turnAbsoluteState.max_angle);
+      }
+      setTurnTargetAngle(targetAngle);
+    }
+
+    function getLimitSwitchMotorPayload() {
+      return {
+        motor1: Boolean(limitMotor1Input?.checked),
+        motor2: Boolean(limitMotor2Input?.checked),
+        motor3: Boolean(limitMotor3Input?.checked),
+        motor4: Boolean(limitMotor4Input?.checked),
+      };
+    }
+
+    function renderConnectionPorts(ports) {
+      if (!connectionPortsMenu) return;
+      connectionPortsMenu.innerHTML = "";
+
+      const rows = Array.isArray(ports) ? ports : [];
+      rows.forEach((entry) => {
+        const portName = String(entry?.port || "").trim();
+        if (!portName) return;
+        const description = String(entry?.description || "").trim();
+
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = "#";
+        link.className = `dropdown-item${portName === selectedPort ? " active" : ""}`;
+        link.dataset.portName = portName;
+        link.textContent = description ? `${portName} - ${description}` : portName;
+        item.appendChild(link);
+        connectionPortsMenu.appendChild(item);
+      });
+
+      if (!connectionPortsMenu.children.length) {
+        const emptyItem = document.createElement("li");
+        const emptyText = document.createElement("span");
+        emptyText.className = "dropdown-item-text text-muted";
+        emptyText.textContent = "Доступные порты не найдены";
+        emptyItem.appendChild(emptyText);
+        connectionPortsMenu.appendChild(emptyItem);
+      }
+
+      const divider = document.createElement("li");
+      divider.innerHTML = '<hr class="dropdown-divider">';
+      connectionPortsMenu.appendChild(divider);
+
+      const refreshItem = document.createElement("li");
+      const refreshLink = document.createElement("a");
+      refreshLink.href = "#";
+      refreshLink.className = "dropdown-item";
+      refreshLink.dataset.refreshPorts = "true";
+      refreshLink.textContent = "Обновить список";
+      refreshItem.appendChild(refreshLink);
+      connectionPortsMenu.appendChild(refreshItem);
+    }
+
+    async function loadConnectionPorts() {
+      if (!connectionPortsMenu) return;
+      connectionPortsMenu.innerHTML = "<li><span class='dropdown-item-text'>Загрузка портов...</span></li>";
+      try {
+        const response = await fetch(`${API_V1}/system/ports`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch ports");
+        }
+
+        const data = await response.json();
+        setSelectedPortLabel(data?.selected_port);
+        renderConnectionPorts(data?.ports);
+      } catch (_) {
+        connectionPortsMenu.innerHTML = "<li><span class='dropdown-item-text text-danger'>Не удалось загрузить порты</span></li>";
+        appendLog("Failed to load connection ports.");
+      }
+    }
+
+    async function selectConnectionPort(portName) {
+      const normalizedPort = String(portName || "").trim();
+      if (!normalizedPort) return;
+      try {
+        const response = await fetch(`${API_V1}/system/port`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ port: normalizedPort }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to set port");
+        }
+
+        const data = await response.json();
+        setSelectedPortLabel(data?.selected_port || normalizedPort);
+        appendLog(`Port selected: ${selectedPort}`);
+        await loadConnectionPorts();
+      } catch (_) {
+        appendLog(`Failed to select port: ${normalizedPort}`);
+      }
+    }
+
+    async function refreshLimitLinearState({ preserveTarget = false, silent = false } = {}) {
+      try {
+        const response = await fetch(`${API_V1}/platform-width/state`);
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Limit position read failed.");
+          if (!silent) {
+            appendLog(`Limit state failed. ${detail}`);
+          }
+          return false;
+        }
+        applyLimitLinearState(data, { preserveTarget });
+        if (!silent) {
+          appendLog(`Limit current position: ${formatCm(limitLinearState.current_position)}`);
+        }
+        return true;
+      } catch (_) {
+        if (!silent) {
+          appendLog("Limit state request failed.");
+        }
+        return false;
+      }
+    }
+
+    async function sendLimitLinearTarget() {
+      const targetPosition = normalizeLimitPosition(limitTargetPositionInput?.value ?? limitLinearState.target_position);
+      const rpm = Math.round(Number(limitRpmSelect?.value ?? limitLinearState.rpm));
+      if (!Number.isFinite(rpm) || rpm <= 0) {
+        appendLog("Limit RPM value is invalid.");
+        return false;
+      }
+
+      setLimitTargetPosition(targetPosition);
+      limitLinearState.rpm = rpm;
+
+      try {
+        const response = await fetch(`${API_V1}/platform-width/target`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            target_width_cm: targetPosition,
+            rpm,
+            speed_profile: "normal",
+          }),
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Limit target command failed.");
+          appendLog(`Limit target failed. ${detail}`);
+          return false;
+        }
+        applyLimitLinearState(data?.data ?? {}, { preserveTarget: false });
+        appendLog(
+          `Limit target ${formatCm(targetPosition)} sent at ${rpm} RPM (delta ${formatCm(data?.data?.delta_position_cm ?? 0)}).`
+        );
+        return true;
+      } catch (_) {
+        appendLog("Limit target request failed.");
+        return false;
+      }
+    }
+
+    async function moveLimitSwitch(direction) {
+      const motors = getLimitSwitchMotorPayload();
+      if (![motors.motor1, motors.motor2, motors.motor3, motors.motor4].some(Boolean)) {
+        appendLog("Limit jog canceled: no motors selected.");
+        return false;
+      }
+
+      const targetPosition = Number(direction) === 1
+        ? Number(limitLinearState.max_position ?? 20)
+        : Number(limitLinearState.min_position ?? 0);
+      const rpm = Math.round(Number(limitRpmSelect?.value ?? limitLinearState.rpm));
+
+      try {
+        const response = await fetch(`${API_V1}/platform-width/target`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            target_width_cm: targetPosition,
+            rpm: Number.isFinite(rpm) && rpm > 0 ? rpm : 60,
+            speed_profile: "normal",
+          }),
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Limit jog failed.");
+          appendLog(`Limit jog failed. ${detail}`);
+          return false;
+        }
+        applyLimitLinearState(data?.data ?? {}, { preserveTarget: false });
+        appendLog(
+          `Limit jog started: ${direction === 1 ? "expand" : "shrink"} target=${formatCm(targetPosition)}`
+        );
+        return true;
+      } catch (_) {
+        appendLog("Limit jog request failed.");
+        return false;
+      }
+    }
+
+    async function stopLimitSwitch({ silent = false } = {}) {
+      try {
+        const response = await fetch(`${API_V1}/platform-width/stop`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode: "soft" }),
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Limit stop failed.");
+          if (!silent) {
+            appendLog(`Limit stop failed. ${detail}`);
+          }
+          return false;
+        }
+        if (!silent) {
+          appendLog("Limit motors stopped.");
+        }
+        return true;
+      } catch (_) {
+        if (!silent) {
+          appendLog("Limit stop request failed.");
+        }
+        return false;
+      }
+    }
+
+    function bindLimitJogButton(button, direction) {
+      if (!button) return;
+
+      const finishJog = () => {
+        if (!limitJogActive) return;
+        limitJogActive = false;
+        if (!limitJogPending) {
+          stopLimitSwitch({ silent: true });
+        }
+      };
+
+      button.addEventListener("pointerdown", async (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        limitJogActive = true;
+        limitJogPending = true;
+        const started = await moveLimitSwitch(direction);
+        limitJogPending = false;
+        if (!started) {
+          limitJogActive = false;
+          return;
+        }
+        if (!limitJogActive) {
+          await stopLimitSwitch({ silent: true });
+        }
+      });
+      button.addEventListener("pointerup", finishJog);
+      button.addEventListener("pointercancel", finishJog);
+      button.addEventListener("pointerleave", finishJog);
+      button.addEventListener("blur", finishJog);
+    }
+
+    async function refreshTurnState({ preserveTarget = false, silent = false } = {}) {
+      try {
+        const response = await fetch(`${API_V1}/platform-turn/state`);
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Turn state read failed.");
+          if (!silent) {
+            appendLog(`Turn state failed. ${detail}`);
+          }
+          return false;
+        }
+        applyTurnState(data, { preserveTarget });
+        if (!silent) {
+          appendLog(`Turn current angle: ${formatAngle(turnAbsoluteState.current_angle)}`);
+        }
+        return true;
+      } catch (_) {
+        if (!silent) {
+          appendLog("Turn state request failed.");
+        }
+        return false;
+      }
+    }
+
+    async function calibrateTurnAbsolute() {
+      try {
+        const response = await fetch(`${API_V1}/platform-turn/calibrate`, { method: "POST" });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Turn calibration failed.");
+          appendLog(`Turn calibration failed. ${detail}`);
+          return false;
+        }
+        applyTurnState(data?.data ?? {}, { preserveTarget: false });
+        appendLog("Turn calibration started. Absolute angle reset to 0°.");
+        return true;
+      } catch (_) {
+        appendLog("Turn calibration request failed.");
+        return false;
+      }
+    }
+
+    async function sendTurnAbsoluteTarget() {
+      const targetAngle = normalizeTurnAngle(turnTargetAngleInput?.value ?? turnAbsoluteState.target_angle);
+      const pendingDelta = Math.round((targetAngle - turnAbsoluteState.current_angle) * 10) / 10;
+      const crabModeEnabled = Boolean(turnCrabModeInput?.checked);
+      const wheelTargets = buildTurnWheelTargets(targetAngle, crabModeEnabled);
+      setTurnTargetAngle(targetAngle);
+
+      try {
+        const response = await fetch(`${API_V1}/platform-turn/target-angle`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            target_angle_deg: targetAngle,
+            crab_mode: crabModeEnabled,
+            wheel_1_deg: wheelTargets.wheel_1_deg,
+            wheel_2_deg: wheelTargets.wheel_2_deg,
+            wheel_3_deg: wheelTargets.wheel_3_deg,
+            wheel_4_deg: wheelTargets.wheel_4_deg,
+            speed_profile: "normal",
+          }),
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Turn command failed.");
+          appendLog(`Turn command failed. ${detail}`);
+          return false;
+        }
+        applyTurnState(data?.data ?? {}, { preserveTarget: false });
+        appendLog(
+          `Turn target ${formatAngle(targetAngle)} sent (${crabModeEnabled ? "crab" : "normal"}, delta ${formatAngle(data?.data?.delta_angle ?? pendingDelta)}).`
+        );
+        return true;
+      } catch (_) {
+        appendLog("Turn command request failed.");
+        return false;
+      }
+    }
+
+    async function calibrateSlave(slaveId) {
+      const normalizedSlaveId = Number(slaveId);
+      if (!Number.isInteger(normalizedSlaveId)) {
+        appendLog("Invalid slave id.");
+        return false;
+      }
+      try {
+        let url = "";
+        let options = { method: "POST" };
+        if (normalizedSlaveId === 1) {
+          url = `${API_V1}/delta/home`;
+        } else if (normalizedSlaveId === 2) {
+          url = `${API_V1}/platform-turn/calibrate`;
+        } else if (normalizedSlaveId === 3) {
+          url = `${API_V1}/platform-width/home`;
+          options = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ speed_profile: "slow" }),
+          };
+        } else {
+          appendLog(`Unsupported slave id ${normalizedSlaveId} for v1 calibration.`);
+          return false;
+        }
+
+        const response = await fetch(url, options);
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, "Calibration command failed.");
+          appendLog(`Calibration failed for slave ${normalizedSlaveId}. ${detail}`);
+          return false;
+        }
+        appendLog(`Calibration command accepted for slave ${normalizedSlaveId}.`);
+        return true;
+      } catch (_) {
+        appendLog(`Calibration request failed for slave ${normalizedSlaveId}.`);
+        return false;
+      }
+    }
+
+    async function goWorkSlave(slaveId) {
+      const normalizedSlaveId = Number(slaveId);
+      if (!Number.isInteger(normalizedSlaveId)) {
+        appendLog("Invalid slave id for go work.");
+        return false;
+      }
+      if (normalizedSlaveId !== 1) {
+        appendLog(`Go work is supported only for delta (slave 1), requested ${normalizedSlaveId}.`);
+        return false;
+      }
+      try {
+        const response = await fetch(`${API_V1}/delta/home`, { method: "POST" });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = extractDetail(data, `Go work failed for slave ${normalizedSlaveId}.`);
+          appendLog(detail);
+          return false;
+        }
+        await fetchManualRobotState();
+        appendLog(`Go work sent to slave ${normalizedSlaveId}.`);
+        return true;
+      } catch (_) {
+        appendLog(`Go work request failed for slave ${normalizedSlaveId}.`);
+        return false;
+      }
+    }
+
+    function normalizeZoneData(raw) {
+      return {
+        x: Number(raw?.x ?? raw?.zone_offset_x ?? raw?.offset_x_px ?? 0),
+        y: Number(raw?.y ?? raw?.zone_offset_y ?? raw?.offset_y_px ?? 0),
+        size_px: Number(raw?.size_px ?? raw?.zone_size_px ?? 0),
+        size_mm: Number(raw?.size_mm ?? raw?.zone_size_mm ?? 0),
+      };
+    }
+
+    function setZoneLabels(raw) {
+      const data = normalizeZoneData(raw);
+      zoneData = data;
+      if (zoneOffsetLabel) {
+        const sx = data.x >= 0 ? `+${data.x}` : `${data.x}`;
+        const sy = data.y >= 0 ? `+${data.y}` : `${data.y}`;
+        zoneOffsetLabel.textContent = `X: ${sx} px | Y: ${sy} px`;
+      }
+      if (zoneSizeLabel) {
+        zoneSizeLabel.textContent = `Size: ${data.size_px} px | ${data.size_mm.toFixed(1)} mm`;
+      }
+      if (zoneMmInput && Number.isFinite(data.size_mm) && data.size_mm > 0) {
+        zoneMmInput.value = String(Math.round(data.size_mm * 10) / 10);
+      }
+      updateCoordinateRangeFromZone();
+      if (coordinateMode) {
+        updateCoordinateTargetLabel();
+      }
+    }
+
+    async function refreshZoneConfig() {
+      try {
+        const response = await fetch(`${API_V1}/vision/zone`);
+        if (!response.ok) return;
+        const data = await response.json();
+        setZoneLabels(data);
+      } catch (_) {}
+    }
+
+    async function loadRobotSettings() {
+      try {
+        const response = await fetch(`${API_V1}/system/settings/robot`);
+        if (!response.ok) return;
+        const data = await response.json();
+        robotSettings = normalizeRobotSettings(data);
+        applyRobotSettingsInputs({ preserveDraft: false });
+      } catch (_) {}
+    }
+
+    async function saveRobotSettings() {
+      const draftRotation = Number.isFinite(Number(robotRotationInput?.value))
+        ? Number(robotRotationInput.value)
+        : Number(draftRobotRotationDeg);
+      setDraftRotation(draftRotation, { syncInput: false });
+
+      const payload = {
+        xy_rotation_deg: Number(draftRobotRotationDeg),
+        invert_x: Boolean(robotInvertXInput?.checked),
+        invert_y: Boolean(robotInvertYInput?.checked),
+        invert_z: Boolean(robotInvertZInput?.checked),
+        detection_conf: getRobotDetectionConf(),
+      };
+
+      payload.xy_rotation_deg = Math.round(clamp(payload.xy_rotation_deg, -360, 360) * 10) / 10;
+      payload.detection_conf = normalizeDetectionConf(payload.detection_conf);
+
+      try {
+        const response = await fetch(`${API_V1}/system/settings/robot`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          appendLog("Failed to save robot settings.");
+          return;
+        }
+        const data = await response.json();
+        robotSettings = normalizeRobotSettings(data);
+        applyRobotSettingsInputs({ preserveDraft: false });
+        appendLog(
+          `[SET] conf=${robotSettings.detection_conf} rot=${Math.round(robotSettings.xy_rotation_deg * 10) / 10} invert=(${robotSettings.invert_x ? 1 : 0},${robotSettings.invert_y ? 1 : 0},${robotSettings.invert_z ? 1 : 0})`
+        );
+      } catch (_) {
+        appendLog("Failed to save robot settings.");
+      }
+    }
+
+    async function moveZone(dx, dy) {
+      try {
+        const response = await fetch(`${API_V1}/vision/zone`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            offset_x_px: Math.round(Number(zoneData?.x ?? 0) + Number(dx)),
+            offset_y_px: Math.round(Number(zoneData?.y ?? 0) + Number(dy)),
+          }),
+        });
+        if (!response.ok) {
+          appendLog("Failed to move detection zone.");
+          return;
+        }
+        const data = await response.json();
+        setZoneLabels(data?.data ?? data);
+      } catch (_) {
+        appendLog("Failed to move detection zone.");
+      }
+    }
+
+    async function changeZoneSize(deltaPx) {
+      try {
+        const response = await fetch(`${API_V1}/vision/zone`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            size_px: Math.round(Number(zoneData?.size_px ?? 0) + Number(deltaPx)),
+          }),
+        });
+        if (!response.ok) {
+          appendLog("Failed to resize detection zone.");
+          return;
+        }
+        const data = await response.json();
+        setZoneLabels(data?.data ?? data);
+      } catch (_) {
+        appendLog("Failed to resize detection zone.");
+      }
+    }
+
+    async function applyZoneMm() {
+      if (!zoneMmInput) return;
+      const value = Number(zoneMmInput.value);
+      if (!Number.isFinite(value) || value <= 0) {
+        appendLog("Invalid mm value.");
+        return;
+      }
+      try {
+        const response = await fetch(`${API_V1}/vision/zone`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ size_mm: value }),
+        });
+        if (!response.ok) {
+          appendLog("Failed to apply mm size.");
+          return;
+        }
+        const data = await response.json();
+        setZoneLabels(data?.data ?? data);
+      } catch (_) {
+        appendLog("Failed to apply mm size.");
+      }
+    }
+
+    async function resetZone() {
+      try {
+        const response = await fetch(`${API_V1}/vision/zone`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ offset_x_px: 0, offset_y_px: 0 }),
+        });
+        if (!response.ok) {
+          appendLog("Failed to reset detection zone.");
+          return;
+        }
+        const data = await response.json();
+        setZoneLabels(data?.data ?? data);
+      } catch (_) {
+        appendLog("Failed to reset detection zone.");
+      }
+    }
+
+    function startRawVideoStream() {
+      showVideoMode();
+      if (!videoFrame) return;
+      fetch(`${API_V1}/vision/start`, { method: "POST" }).catch(() => {});
+      videoFrame.src = `${API_V1}/vision/video?ts=${Date.now()}`;
+      appendLog("Started /video stream (gen_mjpeg).");
+    }
+
+    function startProcessedCameraStream(sendCommand = true) {
+      showVideoMode();
+      if (!videoFrame) return;
+      fetch(`${API_V1}/vision/start`, { method: "POST" }).catch(() => {});
+      const conf = getRobotDetectionConf();
+      const durationMs = normalizeDurationMs(coordinateInputDuration?.value ?? coordinateDurationMs);
+      coordinateDurationMs = durationMs;
+      const url = `${API_V1}/vision/processed-video?send_command=${sendCommand ? "true" : "false"}&detect=true&device=cuda%3A0&half=true&detection_interval=1&detection_imgsz=640&conf=${encodeURIComponent(conf)}&command_duration_ms=${encodeURIComponent(durationMs)}&jpeg_quality=72&max_width=960&ts=${Date.now()}`;
+      videoFrame.src = url;
+      appendLog(sendCommand
+        ? "Camera processing started with Modbus command sending."
+        : "Camera processing started without Modbus command sending."
+      );
+    }
+
+    async function stopVideoStream() {
+      allowWsReconnect = false;
+      try {
+        await fetch(`${API_V1}/vision/stop`, { method: "POST" });
+      } catch (_) {}
+      try {
+        await fetch(`${API_V1}/vision/video/stop`, { method: "POST" });
+      } catch (_) {
+        appendLog("Stop request to backend failed.");
+      }
+
+      if (detectionsWS) {
+        try {
+          detectionsWS.close();
+        } catch (_) {}
+        detectionsWS = null;
+      }
+
+      if (!videoFrame) return;
+      videoFrame.removeAttribute("src");
+      appendLog("Video stream stopped.");
+    }
+
+    function startVisualizationStream() {
+      showVideoMode();
+      if (!videoFrame) return;
+      fetch(`${API_V1}/vision/start`, { method: "POST" }).catch(() => {});
+      const conf = getRobotDetectionConf();
+      const url = `${API_V1}/vision/visualize-video?detect=true&device=cuda%3A0&half=true&detection_interval=4&detection_imgsz=512&conf=${encodeURIComponent(conf)}&jpeg_quality=70&max_width=960&ts=${Date.now()}`;
+      videoFrame.src = url;
+      appendLog(`Visualization stream started: ${url}`);
+    }
+
+    async function sendManualCoordinateMove() {
+      const x = Math.round(Number(coordinateTarget.x));
+      const y = Math.round(Number(coordinateTarget.y));
+      const z = Math.round(Number(coordinateTarget.z));
+      const duration = normalizeDurationMs(coordinateInputDuration?.value ?? coordinateDurationMs);
+      coordinateDurationMs = duration;
+      if (coordinateInputDuration) {
+        coordinateInputDuration.value = String(duration);
+      }
+      updateDurationVisual();
+
+      const sendMove = async () => fetch(
+        `${API_V1}/delta/move`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            x_mm: x,
+            y_mm: y,
+            z_mm: z,
+            duration_ms: duration,
+          }),
+        },
+      );
+
+      try {
+        let response = await sendMove();
+        let payload = await response.json().catch(() => null);
+        if (response.status === 409) {
+          const code = payload?.error?.code || payload?.detail?.code;
+          if (code === "calibration_required") {
+            appendLog("Manual move requires go work calibration. Sending go work...");
+            const calibrated = await goWorkSlave(1);
+            if (!calibrated) {
+              appendLog("Manual move canceled: calibration failed.");
+              return;
+            }
+            response = await sendMove();
+            payload = await response.json().catch(() => null);
+          }
+        }
+
+        if (!response.ok) {
+          appendLog(`Manual move failed (${response.status}). ${extractDetail(payload, "")}`.trim());
+          return;
+        }
+
+        const moveData = payload?.data || payload || {};
+        if (moveData?.last) {
+          applyManualState(moveData.last);
+        } else {
+          await fetchManualRobotState();
+        }
+        if (Number.isFinite(Number(moveData?.duration_ms))) {
+          coordinateDurationMs = normalizeDurationMs(moveData.duration_ms);
+          if (coordinateInputDuration) {
+            coordinateInputDuration.value = String(Math.round(coordinateDurationMs));
+          }
+          updateDurationVisual();
+        }
+        const from = moveData?.from || {};
+        const to = moveData?.to || {};
+        appendLog(
+          `[MANUAL] (${Math.round(Number(from.x_mm || 0))}, ${Math.round(Number(from.y_mm || 0))}, ${Math.round(Number(from.z_mm || 0))}) -> (${Math.round(Number(to.x_mm || 0))}, ${Math.round(Number(to.y_mm || 0))}, ${Math.round(Number(to.z_mm || 0))}) duration=${Math.round(duration)}ms`
+        );
+      } catch (_) {
+        appendLog("Manual move request failed.");
+      }
+    }
+
+    function connectDetectionsWS() {
+      allowWsReconnect = true;
+      if (detectionsWS && (detectionsWS.readyState === WebSocket.OPEN || detectionsWS.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
+      const wsUrl = `${API_BASE.replace(/^http/, "ws")}/api/v1/ws`;
+      detectionsWS = new WebSocket(wsUrl);
+
+      detectionsWS.onopen = () => {
+        appendLog(`WS connected: ${wsUrl}`);
+      };
+
+      detectionsWS.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.event === "robot.state") {
+            const state = data?.state || {};
+            if (state?.selected_port) {
+              setSelectedPortLabel(state.selected_port);
+            }
+            return;
+          }
+          if (data.event === "command.accepted") {
+            appendLog(`[CMD ACCEPT] id=${data.command_id ?? "-"} device=${data.device ?? "-"} type=${data.type ?? "-"}`);
+          }
+          if (data.event === "command.started") {
+            appendLog(`[CMD START] id=${data.command_id ?? "-"} device=${data.device ?? "-"} type=${data.type ?? "-"}`);
+          }
+          if (data.event === "command.completed") {
+            appendLog(`[CMD DONE] id=${data.command_id ?? "-"} device=${data.device ?? "-"} type=${data.type ?? "-"} result=${data.result ?? "done"}`);
+          }
+          if (data.event === "command.failed") {
+            appendLog(`[CMD FAIL] id=${data.command_id ?? "-"} device=${data.device ?? "-"} type=${data.type ?? "-"} ${data.code ?? "device_fault"}: ${data.message ?? "Command failed"}`);
+          }
+          if (data.event === "fault.raised") {
+            appendLog(`[FAULT] device=${data.device ?? "-"} ${data.code ?? "device_fault"}: ${data.message ?? "Fault raised"}`);
+          }
+          if (data.event === "fault.cleared") {
+            appendLog(`[FAULT CLEARED] device=${data.device ?? "-"}`);
+          }
+
+          const visualPayload = (data && typeof data.state === "object" && data.state !== null) ? data.state : data;
+
+          if (visualPayload.event === "robot_command") {
+            const detX = Number(visualPayload.detection_center_x);
+            const detY = Number(visualPayload.detection_center_y);
+            const cmdX = Number(visualPayload.command_point_x);
+            const cmdY = Number(visualPayload.command_point_y);
+            const trackId = Number(visualPayload.track_id);
+            const detPos = Number.isFinite(detX) && Number.isFinite(detY)
+              ? ` det=(${Math.round(detX)}, ${Math.round(detY)})`
+              : "";
+            const cmdPos = Number.isFinite(cmdX) && Number.isFinite(cmdY)
+              ? ` cmd=(${Math.round(cmdX)}, ${Math.round(cmdY)})`
+              : "";
+            const trackText = Number.isFinite(trackId) ? ` id=${Math.round(trackId)}` : "";
+            const state = visualPayload.command_status ? ` status=${visualPayload.command_status}` : "";
+            appendLog(`[CMD]${trackText} x=${visualPayload.target_x_mm} y=${visualPayload.target_y_mm}${detPos}${cmdPos}${state}`);
+          }
+          if (visualPayload.event === "robot_command_rejected") {
+            const reason = String(visualPayload.reason || "unknown");
+            const detX = Number(visualPayload.detection_center_x);
+            const detY = Number(visualPayload.detection_center_y);
+            const cmdX = Number(visualPayload.command_point_x);
+            const cmdY = Number(visualPayload.command_point_y);
+            const trackId = Number(visualPayload.track_id);
+            const zoneX1 = Number(visualPayload.zone_x1);
+            const zoneY1 = Number(visualPayload.zone_y1);
+            const zoneX2 = Number(visualPayload.zone_x2);
+            const zoneY2 = Number(visualPayload.zone_y2);
+            const speedM = Number(visualPayload.platform_speed_m_per_sec);
+            const speedX = Number(visualPayload.platform_speed_x_m_per_sec);
+            const speedY = Number(visualPayload.platform_speed_y_m_per_sec);
+            const horizonMs = Number(visualPayload.predict_horizon_ms);
+            const trackText = Number.isFinite(trackId) ? ` id=${Math.round(trackId)}` : "";
+            const detPos = Number.isFinite(detX) && Number.isFinite(detY)
+              ? ` det=(${Math.round(detX)}, ${Math.round(detY)})`
+              : "";
+            const cmdPos = Number.isFinite(cmdX) && Number.isFinite(cmdY)
+              ? ` pred=(${Math.round(cmdX)}, ${Math.round(cmdY)})`
+              : "";
+            const zoneText = Number.isFinite(zoneX1) && Number.isFinite(zoneY1) && Number.isFinite(zoneX2) && Number.isFinite(zoneY2)
+              ? ` zone=[(${Math.round(zoneX1)},${Math.round(zoneY1)})-(${Math.round(zoneX2)},${Math.round(zoneY2)})]`
+              : "";
+            const speedText = Number.isFinite(speedM)
+              ? ` v=${speedM.toFixed(3)}m/s`
+              : (Number.isFinite(speedX) || Number.isFinite(speedY))
+                ? ` v=(${Number.isFinite(speedX) ? speedX.toFixed(3) : "0.000"},${Number.isFinite(speedY) ? speedY.toFixed(3) : "0.000"})m/s`
+                : "";
+            const horizonText = Number.isFinite(horizonMs) ? ` horizon=${Math.round(horizonMs)}ms` : "";
+            appendLog(`[CMD REJECT]${trackText} reason=${reason} target=(${Math.round(Number(visualPayload.target_x_mm || 0))}, ${Math.round(Number(visualPayload.target_y_mm || 0))})${detPos}${cmdPos}${zoneText}${speedText}${horizonText}`);
+          }
+          if (visualPayload.event === "robot_command_result") {
+            const ok = Boolean(visualPayload.ok);
+            const cmdId = Number(visualPayload.command_id);
+            const elapsedMs = Number(visualPayload.elapsed_ms);
+            const trackId = Number(visualPayload.track_id);
+            const cmdText = Number.isFinite(cmdId) ? ` id=${Math.round(cmdId)}` : "";
+            const trackText = Number.isFinite(trackId) ? ` track=${Math.round(trackId)}` : "";
+            const elapsedText = Number.isFinite(elapsedMs) ? ` elapsed=${Math.round(elapsedMs)}ms` : "";
+            appendLog(
+              ok
+                ? `[CMD DONE]${cmdText}${trackText}${elapsedText} target=(${Math.round(Number(visualPayload.target_x_mm || 0))}, ${Math.round(Number(visualPayload.target_y_mm || 0))})`
+                : `[CMD FAIL]${cmdText}${trackText}${elapsedText} target=(${Math.round(Number(visualPayload.target_x_mm || 0))}, ${Math.round(Number(visualPayload.target_y_mm || 0))}) error=${visualPayload.error || "dispatch_failed"}`
+            );
+          }
+          if (visualPayload.event === "zone_move" || visualPayload.event === "zone_reset" || visualPayload.event === "zone_size" || visualPayload.event === "zone_mm") {
+            setZoneLabels(visualPayload);
+          }
+
+          const detections = Array.isArray(visualPayload.detections) ? visualPayload.detections : [];
+          if (!detections.length) return;
+          detections.slice(0, 3).forEach((item) => {
+            const conf = Number(item?.confidence);
+            const xMm = Number(item?.x_mm);
+            const yMm = Number(item?.y_mm);
+            const trackId = Number(item?.track_id);
+            const processed = Boolean(item?.processed);
+            const confText = Number.isFinite(conf) ? conf.toFixed(2) : "0.00";
+            const trackText = Number.isFinite(trackId) ? ` id=${Math.round(trackId)}` : "";
+            const mmText = Number.isFinite(xMm) && Number.isFinite(yMm)
+              ? ` mm=(${Math.round(xMm)}, ${Math.round(yMm)})`
+              : "";
+            const statusText = processed ? " done=1" : "";
+            appendLog(`[DETECT]${trackText} class=${item.class} conf=${confText}${mmText}${statusText}`);
+          });
+        } catch (_) {}
+      };
+
+      detectionsWS.onclose = () => {
+        if (allowWsReconnect) {
+          setTimeout(connectDetectionsWS, 1200);
+        }
+      };
+
+      detectionsWS.onerror = () => {
+        try {
+          detectionsWS.close();
+        } catch (_) {}
+      };
+    }
+
+    calibrateButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      calibrateSlave(1);
+    });
+
+    calibrateActions.forEach((action) => {
+      action.addEventListener("click", (event) => {
+        event.preventDefault();
+        calibrateSlave(action.dataset.calibrateSlave);
+      });
+    });
+
+    goWorkActions.forEach((action) => {
+      action.addEventListener("click", (event) => {
+        event.preventDefault();
+        goWorkSlave(action.dataset.goWorkSlave);
+      });
+    });
+
+    dropdownConnection?.addEventListener("show.bs.dropdown", () => {
+      loadConnectionPorts();
+    });
+
+    connectionPortsMenu?.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target.closest("[data-port-name], [data-refresh-ports]") : null;
+      if (!target) return;
+      event.preventDefault();
+      if (target.dataset.refreshPorts === "true") {
+        loadConnectionPorts();
+        return;
+      }
+      if (target.dataset.portName) {
+        selectConnectionPort(target.dataset.portName);
+      }
+    });
+
+    logsToggleBtn?.addEventListener("click", () => {
+      applyLogsPanelState(!logsCollapsed);
+    });
+
+    bindLimitJogButton(limitJogInBtn, 0);
+    bindLimitJogButton(limitJogOutBtn, 1);
+
+    limitJogStopBtn?.addEventListener("click", () => {
+      limitJogActive = false;
+      if (!limitJogPending) {
+        stopLimitSwitch();
+      }
+    });
+
+    limitRefreshBtn?.addEventListener("click", () => {
+      refreshLimitLinearState({ preserveTarget: false });
+    });
+
+    limitSendBtn?.addEventListener("click", () => {
+      sendLimitLinearTarget();
+    });
+
+    limitPositionSlider?.addEventListener("input", () => {
+      setLimitTargetPosition(limitPositionSlider.value, { syncInput: true, syncSlider: false });
+    });
+
+    limitTargetPositionInput?.addEventListener("input", () => {
+      setLimitTargetPosition(limitTargetPositionInput.value, { syncInput: false, syncSlider: true });
+    });
+
+    limitTargetPositionInput?.addEventListener("change", () => {
+      setLimitTargetPosition(limitTargetPositionInput.value);
+    });
+
+    limitTargetPositionInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendLimitLinearTarget();
+      }
+    });
+
+    limitRpmSelect?.addEventListener("change", () => {
+      const rpm = Math.round(Number(limitRpmSelect.value));
+      if (Number.isFinite(rpm) && rpm > 0) {
+        limitLinearState.rpm = rpm;
+      }
+    });
+
+    [limitMotor1Input, limitMotor2Input, limitMotor3Input, limitMotor4Input].forEach((input) => {
+      input?.addEventListener("change", () => {
+        applyLimitWheelSelection();
+      });
+    });
+
+    [
+      [limitWheel1, limitMotor1Input],
+      [limitWheel2, limitMotor2Input],
+      [limitWheel3, limitMotor3Input],
+      [limitWheel4, limitMotor4Input],
+    ].forEach(([wheel, input]) => {
+      wheel?.addEventListener("click", () => {
+        if (!input) return;
+        input.checked = !input.checked;
+        applyLimitWheelSelection();
+      });
+    });
+
+    turnRefreshBtn?.addEventListener("click", () => {
+      refreshTurnState({ preserveTarget: false });
+    });
+
+    turnSendBtn?.addEventListener("click", () => {
+      sendTurnAbsoluteTarget();
+    });
+
+    turnCalibrateBtn?.addEventListener("click", () => {
+      calibrateTurnAbsolute();
+    });
+
+    turnAngleSlider?.addEventListener("input", () => {
+      setTurnTargetAngle(turnAngleSlider.value, { syncInput: true, syncSlider: false });
+    });
+
+    turnTargetAngleInput?.addEventListener("input", () => {
+      setTurnTargetAngle(turnTargetAngleInput.value, { syncInput: false, syncSlider: true });
+    });
+
+    turnTargetAngleInput?.addEventListener("change", () => {
+      setTurnTargetAngle(turnTargetAngleInput.value);
+    });
+
+    turnTargetAngleInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendTurnAbsoluteTarget();
+      }
+    });
+
+    startBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      connectDetectionsWS();
+      startProcessedCameraStream(true);
+    });
+
+    startProcessingBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      connectDetectionsWS();
+      startProcessedCameraStream(true);
+    });
+
+    processNoCommandBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      connectDetectionsWS();
+      startProcessedCameraStream(false);
+    });
+
+    openRawVideoBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      startRawVideoStream();
+    });
+
+    visualizationBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      connectDetectionsWS();
+      startVisualizationStream();
+    });
+
+    coordinateBtn?.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await enterCoordinateMode();
+    });
+
+    limitModeBtn?.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await enterLimitMode();
+    });
+
+    turnModeBtn?.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await enterTurnMode();
+    });
+
+    stopBtn?.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await stopVideoStream();
+    });
+
+    videoConfigBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (settingsCollapsed) {
+        enterSettingsMode();
+      } else {
+        applySettingsPanelState(true);
+      }
+    });
+
+    settingsToggleBtn?.addEventListener("click", async () => {
+      if (settingsCollapsed) {
+        await enterSettingsMode();
+      } else {
+        applySettingsPanelState(true);
+      }
+    });
+
+    zoneUpBtn?.addEventListener("click", () => moveZone(0, -ZONE_STEP_PX));
+    zoneDownBtn?.addEventListener("click", () => moveZone(0, ZONE_STEP_PX));
+    zoneLeftBtn?.addEventListener("click", () => moveZone(-ZONE_STEP_PX, 0));
+    zoneRightBtn?.addEventListener("click", () => moveZone(ZONE_STEP_PX, 0));
+    zoneSizeMinusBtn?.addEventListener("click", () => changeZoneSize(-ZONE_SIZE_STEP_PX));
+    zoneSizePlusBtn?.addEventListener("click", () => changeZoneSize(ZONE_SIZE_STEP_PX));
+    zoneMmInput?.addEventListener("change", () => applyZoneMm());
+    zoneMmInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyZoneMm();
+      }
+    });
+    robotSettingsSaveBtn?.addEventListener("click", () => {
+      saveRobotSettings();
+    });
+    detectionConfInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveRobotSettings();
+      }
+    });
+    robotRotationInput?.addEventListener("input", () => {
+      setDraftRotation(robotRotationInput.value, { syncInput: false });
+    });
+    robotRotationInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveRobotSettings();
+      }
+    });
+    rotationKnob?.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      knobPointerId = event.pointerId;
+      rotationKnob.setPointerCapture?.(event.pointerId);
+      setKnobDragging(true);
+      setDraftRotationFromPointer(event.clientX, event.clientY);
+    });
+    rotationKnob?.addEventListener("pointermove", (event) => {
+      if (!knobDragActive) return;
+      if (knobPointerId !== null && event.pointerId !== knobPointerId) return;
+      event.preventDefault();
+      setDraftRotationFromPointer(event.clientX, event.clientY);
+    });
+    rotationKnob?.addEventListener("pointerup", (event) => {
+      stopKnobDrag(event.pointerId);
+    });
+    rotationKnob?.addEventListener("pointercancel", (event) => {
+      stopKnobDrag(event.pointerId);
+    });
+    rotationKnob?.addEventListener("lostpointercapture", () => {
+      stopKnobDrag(null);
+    });
+    rotationKnob?.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const delta = event.deltaY > 0 ? -2 : 2;
+      setDraftRotation(draftRobotRotationDeg + delta, { syncInput: true });
+    }, { passive: false });
+    rotationKnob?.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+        event.preventDefault();
+        setDraftRotation(draftRobotRotationDeg - (event.shiftKey ? 10 : 1), { syncInput: true });
+      } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+        event.preventDefault();
+        setDraftRotation(draftRobotRotationDeg + (event.shiftKey ? 10 : 1), { syncInput: true });
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        saveRobotSettings();
+      }
+    });
+    coordinateMap?.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      coordinateDragPointerId = event.pointerId;
+      coordinateMap.setPointerCapture?.(event.pointerId);
+      setCoordinateDragging(true);
+      setCoordinateTargetFromClientPoint(event.clientX, event.clientY);
+    });
+    coordinateMap?.addEventListener("pointermove", (event) => {
+      if (!coordinateDragActive) return;
+      if (coordinateDragPointerId !== null && event.pointerId !== coordinateDragPointerId) return;
+      event.preventDefault();
+      setCoordinateTargetFromClientPoint(event.clientX, event.clientY);
+    });
+    coordinateMap?.addEventListener("pointerup", (event) => {
+      stopCoordinateDrag(event.pointerId);
+    });
+    coordinateMap?.addEventListener("pointercancel", (event) => {
+      stopCoordinateDrag(event.pointerId);
+    });
+    coordinateMap?.addEventListener("lostpointercapture", () => {
+      stopCoordinateDrag(null);
+    });
+    coordinateMap?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        const rect = coordinateMap.getBoundingClientRect();
+        setCoordinateTargetFromClientPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      }
+    });
+    coordinateZSlider?.addEventListener("input", () => {
+      coordinateTarget.z = Number(coordinateZSlider.value);
+      updateCoordinateTargetLabel();
+    });
+    coordinateInputX?.addEventListener("input", () => applyCoordinateInputs());
+    coordinateInputY?.addEventListener("input", () => applyCoordinateInputs());
+    coordinateInputZ?.addEventListener("input", () => applyCoordinateInputs());
+    coordinateInputDuration?.addEventListener("input", () => applyDurationInput(false));
+    coordinateInputDuration?.addEventListener("change", () => applyDurationInput(true));
+    coordinateInputDuration?.addEventListener("blur", () => applyDurationInput(true));
+    coordinateInputX?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyCoordinateInputs();
+      }
+    });
+    coordinateInputY?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyCoordinateInputs();
+      }
+    });
+    coordinateInputZ?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyCoordinateInputs();
+      }
+    });
+    coordinateInputDuration?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyDurationInput(true);
+      }
+    });
+    coordinateSendBtn?.addEventListener("click", () => {
+      sendManualCoordinateMove();
+    });
+    zoneResetBtn?.addEventListener("click", () => resetZone());
+    updateCoordinateRangeFromZone();
+    updateCoordinateTargetLabel();
+    applyDurationInput(true);
+    updateCoordinateLastLabel();
+    setSelectedPortLabel(selectedPort);
+    applyLimitLinearState(limitLinearState, { preserveTarget: false });
+    applyLimitWheelSelection();
+    applyTurnState(turnAbsoluteState, { preserveTarget: false });
+    updateCenterModeButtons();
+    restoreLogsPanelState();
+    restoreSettingsPanelState();
+    loadConnectionPorts();
+    loadRobotSettings();
+  </script>
+</body>
+</html>
