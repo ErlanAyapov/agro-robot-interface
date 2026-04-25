@@ -172,3 +172,11 @@ http://127.0.0.1:8080/
 
 При открытии файла напрямую через `file://` frontend использует `127.0.0.1:8000` как адрес backend.
 
+## Контакты
+
+Рекомендованный способ связи: Telegram `@yerlan_ayapov`.
+
+Email:
+
+- `E.Ayapov@stud.satbayev.university`
+- `www.yerlan4@gmail.com`
